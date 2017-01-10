@@ -1,0 +1,67 @@
+//created on: Jan 10, 2017
+package eu.trentorise.game.model
+
+global Double const_pandr_distance;
+global Double const_bus_distance;
+
+rule "trip mode update"
+when 
+    Action(id == "PlayerCalendarTrip")
+    InputData( $mode : data["mode"] != null)
+    $tot_dist : PointConcept(name == "total_distance")
+    $tot_trips : PointConcept(name == "total_trips")
+    $mode_dist : PointConcept(name == (String)$mode + "_distance")
+    $mode_trips : PointConcept(name == (String)$mode + "_trips")
+    Player($playerId: id)
+then
+	log("apply \' " + (String)$mode + " update\'");
+	Double distance = 0d;
+	if (((String)$mode).equals("pandr")) {
+		distance = const_pandr_distance;
+	}
+	else if (((String)$mode).equals("bus")) {
+		distance = const_bus_distance;
+	}
+	
+	$mode_dist.setScore($mode_dist.getScore() + distance);
+	$tot_dist.setScore($tot_dist.getScore() + distance);  
+	$tot_trips.setScore($tot_trips.getScore() + 1d);
+    $mode_trips.setScore($mode_trips.getScore() + 1d); 
+    
+    update($mode_dist);
+    update($mode_trips);
+    update($tot_dist);
+    update($tot_trips);
+    insert(new UpdateTeams());
+end
+
+
+rule "trip mode update propagation"
+when
+    Member($mode : inputData["mode"] != null)
+    Player($playerId : id, team == true)
+    $tot_dist : PointConcept(name == "total_distance")
+    $tot_trips : PointConcept(name == "total_trips")
+    $mode_dist : PointConcept(name == (String)$mode + "_distance")
+    $mode_trips : PointConcept(name == (String)$mode + "_trips")
+then
+    log("apply \'mode " + (String)$mode + " update propagation\'");
+    Double distance = 0d;
+	if (((String)$mode).equals("pandr")) {
+		distance = const_pandr_distance;
+	}
+	else if (((String)$mode).equals("bus")) {
+		distance = const_bus_distance;
+	}
+	
+	$mode_dist.setScore($mode_dist.getScore() + distance);
+	$tot_dist.setScore($tot_dist.getScore() + distance);  
+	$tot_trips.setScore($tot_trips.getScore() + 1d);
+    $mode_trips.setScore($mode_trips.getScore() + 1d); 
+    
+    update($mode_dist);
+    update($mode_trips);
+    update($tot_dist);
+    update($tot_trips);
+    insert(new UpdateTeams());
+end
