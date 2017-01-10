@@ -3,24 +3,62 @@ package eu.trentorise.game.model
 
 global Double const_pandr_distance;
 global Double const_bus_distance;
+global Double const_bike_distance;
+global Double const_walk_distance;
+global Double const_cloudy_bonus;
+global Double const_rain_bonus;
+global Double const_snow_bonus;
+
+// ****************************************** global functions 	
+function Double getDistanceByMode(String mode) {
+	Double ret = 0.0;
+	
+	if(mode.equals("bus"))
+		ret = const_bus_distance;
+	else if(mode.equals("pandr"))
+		ret = const_pandr_distance;
+	else if(mode.equals("bike"))
+		ret = const_bike_distance;
+	else if(mode.equals("walk"))
+		ret = const_walk_distance;
+	else // absent or car
+		ret = 0.0;
+		
+	return ret;
+}
+
+function Double getMeteoBonus(String meteo) {
+	Double ret = 0.0;
+	
+	if(meteo.equals("cloudy"))
+		ret = const_cloudy_bonus;
+	else if(meteo.equals("rain"))
+		ret = const_rain_bonus;
+	else if(meteo.equals("snow"))
+		ret = const_snow_bonus;
+	else // sunny
+		ret = 0.0;
+	
+	return ret;
+}
 
 rule "trip mode update"
 when 
     Action(id == "PlayerCalendarTrip")
     InputData( $mode : data["mode"] != null)
+    InputData( $meteo : data["meteo"] != null)
+    InputData( $date : data["school_date"] != null)
     $tot_dist : PointConcept(name == "total_distance")
     $tot_trips : PointConcept(name == "total_trips")
     $mode_dist : PointConcept(name == (String)$mode + "_distance")
     $mode_trips : PointConcept(name == (String)$mode + "_trips")
-    Player($playerId: id)
 then
-	log("apply \' " + (String)$mode + " update\'");
-	Double distance = 0d;
-	if (((String)$mode).equals("pandr")) {
-		distance = const_pandr_distance;
-	}
-	else if (((String)$mode).equals("bus")) {
-		distance = const_bus_distance;
+	String myMode = (String)$mode;
+	log("apply \' " + myMode + " update\'");
+	Double distance = getDistanceByMode(myMode);
+	if (myMode.equals("walk") || myMode.equals("bike")) {
+		Double mBonus = getMeteoBonus((String)$meteo);
+		distance += mBonus;
 	}
 	
 	$mode_dist.setScore($mode_dist.getScore() + distance);
@@ -39,19 +77,20 @@ end
 rule "trip mode update propagation"
 when
     Member($mode : inputData["mode"] != null)
+    Member($meteo : inputData["meteo"] != null)
+    Member($date : inputData["school_date"] != null)
     Player($playerId : id, team == true)
     $tot_dist : PointConcept(name == "total_distance")
     $tot_trips : PointConcept(name == "total_trips")
     $mode_dist : PointConcept(name == (String)$mode + "_distance")
     $mode_trips : PointConcept(name == (String)$mode + "_trips")
 then
-    log("apply \'mode " + (String)$mode + " update propagation\'");
-    Double distance = 0d;
-	if (((String)$mode).equals("pandr")) {
-		distance = const_pandr_distance;
-	}
-	else if (((String)$mode).equals("bus")) {
-		distance = const_bus_distance;
+	String myMode = (String)$mode;
+    log("apply \'mode " + (String)myMode + " update propagation\'");
+    Double distance = getDistanceByMode(myMode);
+	if (myMode.equals("walk") || myMode.equals("bike")) {
+		Double mBonus = getMeteoBonus((String)$meteo);
+		distance += mBonus;
 	}
 	
 	$mode_dist.setScore($mode_dist.getScore() + distance);

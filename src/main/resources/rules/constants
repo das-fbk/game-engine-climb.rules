@@ -15,5 +15,13 @@
 # String  (i.e. var=park)
 # java.util.ArrayList (i.e var=park,street,bikestation)
 
+# constants for modal distance (except for pedibus)
 const_pandr_distance = 80.0
 const_bus_distance = 1500.0
+const_bike_distance = 800.0
+const_walk_distance = 400.0
+
+# constants for meteo bonuses
+const_cloudy_bonus = 50.0
+const_rain_bonus = 100.0
+const_snow_bonus = 200.0
