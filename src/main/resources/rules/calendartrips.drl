@@ -1,16 +1,15 @@
 //created on: Jan 10, 2017
 package eu.trentorise.game.model
 
-global Double const_pandr_distance;
-global Double const_bus_distance;
-global Double const_bike_distance;
-global Double const_walk_distance;
-global Double const_cloudy_bonus;
-global Double const_rain_bonus;
-global Double const_snow_bonus;
 
 // ****************************************** global functions 	
 function Double getDistanceByMode(String mode) {
+	//constants for mode distances
+	Double const_pandr_distance = 80.0;
+	Double const_bus_distance = 1500.0;
+	Double const_bike_distance = 800.0;
+	Double const_walk_distance = 400.0;
+	
 	Double ret = 0.0;
 	
 	if(mode.equals("bus"))
@@ -28,6 +27,11 @@ function Double getDistanceByMode(String mode) {
 }
 
 function Double getMeteoBonus(String meteo) {
+	//constants for meto bonuses
+	Double const_cloudy_bonus = 50.0;
+	Double const_rain_bonus = 100.0;
+	Double const_snow_bonus = 200.0;
+	
 	Double ret = 0.0;
 	
 	if(meteo.equals("cloudy"))
