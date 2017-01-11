@@ -27,7 +27,7 @@ function Double getDistanceByMode(String mode) {
 }
 
 function Double getMeteoBonus(String meteo) {
-	//constants for meto bonuses
+	//constants for meteo bonuses
 	Double const_cloudy_bonus = 50.0;
 	Double const_rain_bonus = 100.0;
 	Double const_snow_bonus = 200.0;
@@ -49,9 +49,7 @@ function Double getMeteoBonus(String meteo) {
 rule "trip mode update"
 when 
     Action(id == "PlayerCalendarTrip")
-    InputData( $mode : data["mode"] != null)
-    InputData( $meteo : data["meteo"] != null)
-    InputData( $date : data["school_date"] != null)
+    InputData( $mode : data["mode"] != null, $meteo : data["meteo"] != null, $date : data["school_date"] != null )
     $tot_dist : PointConcept(name == "total_distance")
     $tot_trips : PointConcept(name == "total_trips")
     $mode_dist : PointConcept(name == (String)$mode + "_distance")
@@ -80,9 +78,7 @@ end
 
 rule "trip mode update propagation"
 when
-    Member($mode : inputData["mode"] != null)
-    Member($meteo : inputData["meteo"] != null)
-    Member($date : inputData["school_date"] != null)
+    Member($mode : inputData["mode"] != null, $meteo : inputData["meteo"] != null, $date : inputData["school_date"] != null)
     Player($playerId : id, team == true)
     $tot_dist : PointConcept(name == "total_distance")
     $tot_trips : PointConcept(name == "total_trips")
