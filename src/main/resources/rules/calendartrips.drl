@@ -6,7 +6,7 @@ package eu.trentorise.game.model
 function Double getDistanceByMode(String mode) {
 	//constants for mode distances
 	Double const_pandr_distance = 80.0;
-	Double const_bus_distance = 1500.0;
+	Double const_bus_distance = 1800.0;
 	Double const_bike_distance = 800.0;
 	Double const_walk_distance = 400.0;
 	
@@ -16,10 +16,10 @@ function Double getDistanceByMode(String mode) {
 		ret = const_bus_distance;
 	else if(mode.equals("pandr"))
 		ret = const_pandr_distance;
-	else if(mode.equals("bike"))
-		ret = const_bike_distance;
-	else if(mode.equals("walk"))
+	else if(mode.equals("zeroImpact_solo"))
 		ret = const_walk_distance;
+	else if(mode.equals("zeroImpact_wAdult"))
+		ret = const_bike_distance;
 	else // absent or car
 		ret = 0.0;
 		
@@ -58,7 +58,7 @@ then
 	String myMode = (String)$mode;
 	log("apply \' " + myMode + " update\'");
 	Double distance = getDistanceByMode(myMode);
-	if (myMode.equals("walk") || myMode.equals("bike")) {
+	if (myMode.startsWith("zeroImpact")) {
 		Double mBonus = getMeteoBonus((String)$meteo);
 		distance += mBonus;
 	}
@@ -88,7 +88,7 @@ then
 	String myMode = (String)$mode;
     log("apply \'mode " + (String)myMode + " update propagation\'");
     Double distance = getDistanceByMode(myMode);
-	if (myMode.equals("walk") || myMode.equals("bike")) {
+	if (myMode.startsWith("zeroImpact")) {
 		Double mBonus = getMeteoBonus((String)$meteo);
 		distance += mBonus;
 	}
