@@ -1,13 +1,13 @@
 package eu.trentorise.game.model
 
+global Double const_zi_solo_bonus;
 
 // ****************************************** global functions 	
 function Double getDistanceByMode(String mode) {
 	//constants for mode distances
-	Double const_pandr_distance = 80.0;
+	Double const_pandr_distance = 100.0;
 	Double const_bus_distance = 1800.0;
-	Double const_bike_distance = 800.0;
-	Double const_walk_distance = 400.0;
+	Double const_zeroimpact_distance = 500.0;
 	
 	Double ret = 0.0;
 	
@@ -15,11 +15,9 @@ function Double getDistanceByMode(String mode) {
 		ret = const_bus_distance;
 	else if(mode.equals("pandr"))
 		ret = const_pandr_distance;
-	else if(mode.equals("zeroImpact_solo"))
-		ret = const_walk_distance;
-	else if(mode.equals("zeroImpact_wAdult"))
-		ret = const_bike_distance;
-	else // absent or car
+	else if(mode.equals("zeroImpact_solo") || mode.equals("zeroImpact_wAdult"))
+		ret = const_zeroimpact_distance;
+	else // absent or car or pedibus
 		ret = 0.0;
 		
 	return ret;
@@ -53,20 +51,36 @@ when
     $tot_trips : PointConcept(name == "total_trips")
     $mode_dist : PointConcept(name == (String)$mode + "_distance")
     $mode_trips : PointConcept(name == (String)$mode + "_trips")
+    $bonus_dist : PointConcept(name == "bonus_distance")
 then
 	String myMode = (String)$mode;
-	log("apply \' " + myMode + " update\'");
-	Double distance = getDistanceByMode(myMode);
-	if (myMode.startsWith("zeroImpact")) {
-		Double mBonus = getMeteoBonus((String)$meteo);
-		distance += mBonus;
+	String myMeteo = (String)$meteo;
+	Double meteoBonus = 0.0;
+	Double distance = 0.0;
+	
+	if (myMode.startsWith("zeroImpact") || myMode.equals("pedibus")) {
+		meteoBonus = getMeteoBonus(myMeteo);
+		if (meteoBonus > 0.0) {
+			log("apply meteo Bonus for " + myMeteo + " weather");
+		}
+		if (myMode.equals("zeroImpact_solo")) {
+			log("apply children independent mobiliy Bonus");
+			meteoBonus += const_zi_solo_bonus;
+		}
+		$bonus_dist.setScore($bonus_dist.getScore() + meteoBonus);
+	}
+	if (! myMode.equals("pedibus")) {
+		log("apply " + myMode + " update");		
+		distance = getDistanceByMode(myMode);
+		$mode_dist.setScore($mode_dist.getScore() + distance);
+		$mode_trips.setScore($mode_trips.getScore() + 1d); 
+		$tot_trips.setScore($tot_trips.getScore() + 1d);
 	}
 	
-	$mode_dist.setScore($mode_dist.getScore() + distance);
-	$tot_dist.setScore($tot_dist.getScore() + distance);  
-	$tot_trips.setScore($tot_trips.getScore() + 1d);
-    $mode_trips.setScore($mode_trips.getScore() + 1d); 
+	Double totalUpdate = distance + meteoBonus;
+	$tot_dist.setScore($tot_dist.getScore() + totalUpdate);  
     
+    update($bonus_dist);
     update($mode_dist);
     update($mode_trips);
     update($tot_dist);
@@ -83,23 +97,36 @@ when
     $tot_trips : PointConcept(name == "total_trips")
     $mode_dist : PointConcept(name == (String)$mode + "_distance")
     $mode_trips : PointConcept(name == (String)$mode + "_trips")
+    $bonus_dist : PointConcept(name == "bonus_distance")
 then
+    log("apply trip mode update propagation");
 	String myMode = (String)$mode;
-    log("apply \'mode " + (String)myMode + " update propagation\'");
-    Double distance = getDistanceByMode(myMode);
-	if (myMode.startsWith("zeroImpact")) {
-		Double mBonus = getMeteoBonus((String)$meteo);
-		distance += mBonus;
+	String myMeteo = (String)$meteo;
+	Double meteoBonus = 0.0;
+	Double distance = 0.0;
+	
+	if (myMode.startsWith("zeroImpact") || myMode.equals("pedibus")) {
+		meteoBonus = getMeteoBonus(myMeteo);
+		if (myMode.equals("zeroImpact_solo")) {
+			meteoBonus += const_zi_solo_bonus;
+		}
+		$bonus_dist.setScore($bonus_dist.getScore() + meteoBonus);
+	}
+	if (! myMode.equals("pedibus")) {
+		distance = getDistanceByMode(myMode);
+		$mode_dist.setScore($mode_dist.getScore() + distance);
+		$mode_trips.setScore($mode_trips.getScore() + 1d);
+		$tot_trips.setScore($tot_trips.getScore() + 1d);
 	}
 	
-	$mode_dist.setScore($mode_dist.getScore() + distance);
-	$tot_dist.setScore($tot_dist.getScore() + distance);  
-	$tot_trips.setScore($tot_trips.getScore() + 1d);
-    $mode_trips.setScore($mode_trips.getScore() + 1d); 
+	Double totalUpdate = distance + meteoBonus;
+	$tot_dist.setScore($tot_dist.getScore() + totalUpdate);
     
+    update($bonus_dist);
     update($mode_dist);
     update($mode_trips);
     update($tot_dist);
     update($tot_trips);
     insert(new UpdateTeams());
+
 end

@@ -1,14 +1,15 @@
 package eu.trentorise.game.model
 
+global Double const_pedibus_multiplier;
 
 rule "pedibus update"
 when // here we need to understand better how InputData will be structured
     Action(id == "PedibusKidTrip")
     InputData( $distance : data["meters-distance"] != null)
     $tot_dist : PointConcept(name == "total_distance")
-    $pedibus_dist : PointConcept(name == "zeroImpact_wAdult_distance")
+    $pedibus_dist : PointConcept(name == "pedibus_distance")
     $tot_trips : PointConcept(name == "total_trips")
-    $pedibus_trips : PointConcept(name == "zeroImpact_wAdult_trips")
+    $pedibus_trips : PointConcept(name == "pedibus_trips")
     Player($playerId: id)
 then
 	log("apply \'pedibus update\' of meters " + $distance); 
@@ -29,9 +30,9 @@ when
     Member($distance : inputData["meters-distance"] != null)
     Player($playerId : id, team == true)
     $tot_dist : PointConcept(name == "total_distance")
-    $pedibus_dist : PointConcept(name == "zeroImpact_wAdult_distance")
+    $pedibus_dist : PointConcept(name == "pedibus_distance")
     $tot_trips : PointConcept(name == "total_trips")
-    $pedibus_trips : PointConcept(name == "zeroImpact_wAdult_trips")
+    $pedibus_trips : PointConcept(name == "pedibus_trips")
 then
     log("apply \'pedibus update propagation\' of meters " + $distance);
     $pedibus_dist.setScore($pedibus_dist.getScore() + (Double)$distance); 

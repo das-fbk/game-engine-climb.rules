@@ -1,8 +1,5 @@
 package  eu.trentorise.game.model
 
-
-package eu.trentorise.game.model
-
 import eu.trentorise.game.notification.BadgeNotification;
 
 global Double leg_1_distance;
@@ -12,67 +9,72 @@ global Double leg_4_distance;
 global Double leg_5_distance;
 
 rule "R-add-badge leg-1"
+	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= leg_1_distance)
-    $bc : BadgeCollectionConcept(name =="LegsToKangole", badgeEarned not contains 'Leg_1') 
+    $bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Leg_1') 
     Game( $gameId: id)
     Player($teamId : id, team == true)
 then
     log("apply \'R-add-badge leg-1\'");
     $bc.getBadgeEarned().add('Leg_1');
-    insert(new BadgeNotification($gameId,$teamId,'Leg_1'));
+    insert(new BadgeNotification($gameId,$teamId, $bc.getName(), 'Leg_1'));
     update( $bc );
 end
 
 rule "R-add-badge leg-2"
+	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= leg_2_distance)
-    $bc : BadgeCollectionConcept(name =="LegsToKangole", badgeEarned not contains 'Leg_2') 
+    $bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Leg_2') 
     Game( $gameId: id)
     Player($teamId : id, team == true)
 then
     log("apply \'R-add-badge leg-2\'");
     $bc.getBadgeEarned().add('Leg_2');
-    insert(new BadgeNotification($gameId,$teamId,'Leg_2'));
+    insert(new BadgeNotification($gameId,$teamId, $bc.getName(), 'Leg_2'));
     update( $bc );
 end
 
 rule "R-add-badge leg-3"
+	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= leg_3_distance)
-    $bc : BadgeCollectionConcept(name =="LegsToKangole", badgeEarned not contains 'Leg_3') 
+    $bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Leg_3') 
     Game( $gameId: id)
     Player($teamId : id, team == true)
 then
     log("apply \'R-add-badge leg-3\'");
     $bc.getBadgeEarned().add('Leg_3');
-    insert(new BadgeNotification($gameId,$teamId,'Leg_3'));
+    insert(new BadgeNotification($gameId,$teamId,$bc.getName(),'Leg_3'));
     update( $bc );
 end
 
 rule "R-add-badge leg-4"
+	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= leg_4_distance)
-    $bc : BadgeCollectionConcept(name =="LegsToKangole", badgeEarned not contains 'Leg_4') 
+    $bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Leg_4') 
     Game( $gameId: id)
     Player($teamId : id, team == true)
 then
     log("apply \'R-add-badge leg-4\'");
     $bc.getBadgeEarned().add('Leg_4');
-    insert(new BadgeNotification($gameId,$teamId,'Leg_4'));
+    insert(new BadgeNotification($gameId,$teamId,$bc.getName(),'Leg_4'));
     update( $bc );
 end
 
 rule "R-add-badge leg-5"
+	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= leg_5_distance)
-    $bc : BadgeCollectionConcept(name =="LegsToKangole", badgeEarned not contains 'Leg_5') 
+    $bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Leg_5') 
     Game( $gameId: id)
     Player($teamId : id, team == true)
 then
     log("apply \'R-add-badge leg-5\'");
     $bc.getBadgeEarned().add('Leg_5');
-    insert(new BadgeNotification($gameId,$teamId,'Leg_5'));
+    insert(new BadgeNotification($gameId,$teamId,$bc.getName(),'Leg_5'));
     update( $bc );
 end
 

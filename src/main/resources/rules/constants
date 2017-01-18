@@ -16,19 +16,24 @@
 # java.util.ArrayList (i.e var=park,street,bikestation)
 
 # constants for modal distance (except for pedibus)
-# const_pandr_distance = 80.0
-# const_bus_distance = 1500.0
-# const_bike_distance = 800.0
-# const_walk_distance = 400.0
+# const_pandr_distance = 100.0
+# const_bus_distance = 1800.0
+# const_zeroimpact_distance = 500.0
 
 # constants for meteo bonuses
 # const_cloudy_bonus = 50.0
 # const_rain_bonus = 100.0
 # const_snow_bonus = 200.0
 
+#for zero impact trips taken autonomously
+const_zi_solo_bonus = 100.0  
+
+#multiplier for pedibus trips
+const_pedibus_multiplier = 1.5 
+
 #constants representing distances to legs 
 leg_1_distance=10000.0
 leg_2_distance=20000.0
-leg_3_distance=30000.0
-leg_4_distance=40000.0
-leg_5_distance=50000.0
+leg_3_distance=21000.0
+leg_4_distance=22000.0
+leg_5_distance=23000.0
