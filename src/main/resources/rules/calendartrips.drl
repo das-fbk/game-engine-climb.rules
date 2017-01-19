@@ -25,9 +25,9 @@ function Double getDistanceByMode(String mode) {
 
 function Double getMeteoBonus(String meteo) {
 	//constants for meteo bonuses
-	Double const_cloudy_bonus = 50.0;
-	Double const_rain_bonus = 100.0;
-	Double const_snow_bonus = 200.0;
+	Double const_cloudy_bonus = 100.0;
+	Double const_rain_bonus = 200.0;
+	Double const_snow_bonus = 400.0;
 	
 	Double ret = 0.0;
 	
