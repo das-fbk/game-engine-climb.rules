@@ -13,8 +13,8 @@ when // here we need to understand better how InputData will be structured
     Player($playerId: id)
 then
 	log("apply \'pedibus update\' of meters " + $distance); 
-	$pedibus_dist.setScore($pedibus_dist.getScore() + (Double)$distance); 
-    $tot_dist.setScore($tot_dist.getScore() + (Double)$distance); 
+	$pedibus_dist.setScore($pedibus_dist.getScore() + (Double)$distance * const_pedibus_multiplier); 
+    $tot_dist.setScore($tot_dist.getScore() + (Double)$distance * const_pedibus_multiplier); 
     $pedibus_trips.setScore($pedibus_trips.getScore() + 1d); 
     $tot_trips.setScore($tot_trips.getScore() + 1d);
     update($pedibus_dist);
@@ -34,8 +34,8 @@ when
     $tot_trips : PointConcept(name == "total_trips")
     $pedibus_trips : PointConcept(name == "pedibus_trips")
 then
-    log("apply \'pedibus update propagation\' of meters " + $distance);
-    $pedibus_dist.setScore($pedibus_dist.getScore() + (Double)$distance); 
+    log("apply \'pedibus update propagation\' of meters " + $distance * const_pedibus_multiplier);
+    $pedibus_dist.setScore($pedibus_dist.getScore() + (Double)$distance * const_pedibus_multiplier); 
     $tot_dist.setScore($tot_dist.getScore() + (Double)$distance); 
     $pedibus_trips.setScore($pedibus_trips.getScore() + 1d); 
     $tot_trips.setScore($tot_trips.getScore() + 1d);

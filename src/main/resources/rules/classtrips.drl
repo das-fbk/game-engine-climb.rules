@@ -1,0 +1,53 @@
+package eu.trentorise.game.model
+
+rule "class trip update"
+when
+    Action(id == "ClassWalkTrip")
+    InputData( $mode : InputData["mode"] == "zeroImpact_wAdult", $distance : InputData["meters-distance"] != null, 
+    	$num : InputData["participants"]!= null, $meteo : InputData["meteo"] != null, $date : InputData["school_date"] != null )
+    $tot_dist : PointConcept(name == "total_distance")
+    $tot_trips : PointConcept(name == "total_trips")
+    $mode_dist : PointConcept(name == (String)$mode + "_distance")
+    $mode_trips : PointConcept(name == (String)$mode + "_trips")
+then
+	log("apply class trips with " + $num " participants update propagation");
+		
+	//for now no Meteo bonus ???
+	Double tripDistance = (Double)$num * (Double)$distance;
+	$mode_dist.setScore($mode_dist.getScore() + tripDistance);
+	$mode_trips.setScore($mode_trips.getScore() + (Double)$num);
+	$tot_dist.setScore($tot_dist.getScore() + tripDistance);
+	$tot_trips.setScore($ot_trips.getScore() + (Double)$num);
+
+    update($mode_dist);
+    update($mode_trips);
+    update($tot_dist);
+    update($tot_trips);
+    insert(new UpdateTeams());	
+end
+
+rule "class trip propagation"
+when
+    Member( $mode : data["mode"] == "zeroImpact_wAdult", $distance : data["meters-distance"] != null, 
+    	$num : data["participants"]!= null, $meteo : data["meteo"] != null, $date : data["school_date"] != null )
+    Player($playerId : id, team == true)
+    $tot_dist : PointConcept(name == "total_distance")
+    $tot_trips : PointConcept(name == "total_trips")
+    $mode_dist : PointConcept(name == (String)$mode + "_distance")
+    $mode_trips : PointConcept(name == (String)$mode + "_trips")
+then
+	log("apply class trips with " + $num " participants update");
+		
+	//for now no Meteo bonus ???
+	Double tripDistance = (Double)$num * (Double)$distance;
+	$mode_dist.setScore($mode_dist.getScore() + tripDistance);
+	$mode_trips.setScore($mode_trips.getScore() + (Double)$num);
+	$tot_dist.setScore($tot_dist.getScore() + tripDistance);
+	$tot_trips.setScore($ot_trips.getScore() + (Double)$num);
+
+    update($mode_dist);
+    update($mode_trips);
+    update($tot_dist);
+    update($tot_trips);
+    insert(new UpdateTeams());
+end
