@@ -46,7 +46,7 @@ function Double getMeteoBonus(String meteo) {
 rule "absence update"
 when
 	Action(id == "PlayerCalendarTrip")
-    InputData( $mode : data["mode"] != null, $mode == "absent", $date : data["school_date"] != null)
+    InputData( $mode : data["mode"] != null, $mode == "absent", $date : data["school-date"] != null)
     $absence : PointConcept(name == "absence_count")
     $part : PointConcept(name == "participation_count")
 then
@@ -64,7 +64,7 @@ end
 
 rule "trip absence update propagation"
 when
-	Member($mode : inputData["mode"] != null, $mode == "absent", inputData["school_date"] != null)
+	Member($mode : inputData["mode"] != null, $mode == "absent", inputData["school-date"] != null)
     Player($playerId : id, team == true)
     $absence : PointConcept(name == "absence_count")
     $part : PointConcept(name == "participation_count")
@@ -82,7 +82,7 @@ end
 rule "trip mode update"
 when 
     Action(id == "PlayerCalendarTrip")
-    InputData( $mode : data["mode"] != null, $mode != "absent", $meteo : data["meteo"] != null, $date : data["school_date"] != null )
+    InputData( $mode : data["mode"] != null, $mode != "absent", $meteo : data["meteo"] != null, $date : data["school-date"] != null )
     $tot_dist : PointConcept(name == "total_distance")
     $tot_trips : PointConcept(name == "total_trips")
     $mode_dist : PointConcept(name == (String)$mode + "_distance")
@@ -134,7 +134,7 @@ end
 
 rule "trip mode update propagation"
 when
-    Member($mode : inputData["mode"] != null, $mode != "absent", $meteo : inputData["meteo"] != null, $date : inputData["school_date"] != null)
+    Member($mode : inputData["mode"] != null, $mode != "absent", $meteo : inputData["meteo"] != null, $date : inputData["school-date"] != null)
     Player($playerId : id, team == true)
     $tot_dist : PointConcept(name == "total_distance")
     $tot_trips : PointConcept(name == "total_trips")
