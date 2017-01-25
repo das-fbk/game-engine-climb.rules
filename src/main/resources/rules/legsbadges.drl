@@ -2,6 +2,7 @@ package  eu.trentorise.game.model
 
 import eu.trentorise.game.notification.BadgeNotification;
 
+global String const_school_name;
 global Double const_almost_reached_next_leg;
 global Double leg_1_distance;
 global Double leg_2_distance;
@@ -10,13 +11,13 @@ global Double leg_4_distance;
 global Double leg_5_distance;
 
 rule "R-notify-almost leg-1"
-	salience -1000
+	salience -2000
 when 
 	$bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Leg_1') 
     PointConcept(name == 'total_distance', 
     	score > leg_1_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < leg_1_distance)
     Game( $gameId: id)
-    Player( $teamId : id, team == true )
+    Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-notify-almost leg-1\'");
     insert(new BadgeNotification($gameId,$teamId, $bc.getName(), 'almost reached Leg_1'));
@@ -29,7 +30,7 @@ when
     PointConcept(name == 'total_distance', score >= leg_1_distance)
     $bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Leg_1') 
     Game( $gameId: id)
-    Player($teamId : id, team == true)
+    Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-add-badge leg-1\'");
     $bc.getBadgeEarned().add('Leg_1');
@@ -38,13 +39,13 @@ then
 end
 
 rule "R-notify-almost leg-2"
-	salience -1000
+	salience -2000
 when 
 	$bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Leg_2') 
     PointConcept(name == 'total_distance', 
     	score > leg_2_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < leg_2_distance)
     Game( $gameId: id)
-    Player( $teamId : id, team == true )
+    Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-notify-almost leg-2\'");
     insert(new BadgeNotification($gameId,$teamId, $bc.getName(), 'almost reached Leg_2'));
@@ -57,7 +58,7 @@ when
     PointConcept(name == 'total_distance', score >= leg_2_distance)
     $bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Leg_2') 
     Game( $gameId: id)
-    Player($teamId : id, team == true)
+    Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-add-badge leg-2\'");
     $bc.getBadgeEarned().add('Leg_2');
@@ -66,13 +67,13 @@ then
 end
 
 rule "R-notify-almost leg-3"
-	salience -1000
+	salience -2000
 when 
 	$bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Leg_3') 
     PointConcept(name == 'total_distance', 
     	score > leg_3_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < leg_3_distance)
     Game( $gameId: id)
-    Player( $teamId : id, team == true )
+    Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-notify-almost leg-3\'");
     insert(new BadgeNotification($gameId,$teamId, $bc.getName(), 'almost reached Leg_3'));
@@ -85,7 +86,7 @@ when
     PointConcept(name == 'total_distance', score >= leg_3_distance)
     $bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Leg_3') 
     Game( $gameId: id)
-    Player($teamId : id, team == true)
+    Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-add-badge leg-3\'");
     $bc.getBadgeEarned().add('Leg_3');
@@ -94,13 +95,13 @@ then
 end
 
 rule "R-notify-almost leg-4"
-	salience -1000
+	salience -2000
 when 
 	$bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Leg_4') 
     PointConcept(name == 'total_distance', 
     	score > leg_4_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < leg_4_distance)
     Game( $gameId: id)
-    Player( $teamId : id, team == true )
+    Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-notify-almost leg-4\'");
     insert(new BadgeNotification($gameId,$teamId, $bc.getName(), 'almost reached Leg_4'));
@@ -113,7 +114,7 @@ when
     PointConcept(name == 'total_distance', score >= leg_4_distance)
     $bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Leg_4') 
     Game( $gameId: id)
-    Player($teamId : id, team == true)
+    Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-add-badge leg-4\'");
     $bc.getBadgeEarned().add('Leg_4');
@@ -121,13 +122,13 @@ then
     update( $bc );
 end
 rule "R-notify-almost leg-5"
-	salience -1000
+	salience -2000
 when 
 	$bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Leg_5') 
     PointConcept(name == 'total_distance', 
     	score > leg_5_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < leg_5_distance)
     Game( $gameId: id)
-    Player( $teamId : id, team == true )
+    Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-notify-almost leg-5\'");
     insert(new BadgeNotification($gameId,$teamId, $bc.getName(), 'almost reached Leg_5'));
@@ -140,12 +141,10 @@ when
     PointConcept(name == 'total_distance', score >= leg_5_distance)
     $bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Leg_5') 
     Game( $gameId: id)
-    Player($teamId : id, team == true)
+    Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-add-badge leg-5\'");
     $bc.getBadgeEarned().add('Leg_5');
     insert(new BadgeNotification($gameId,$teamId,$bc.getName(),'Leg_5'));
     update( $bc );
 end
-
-
