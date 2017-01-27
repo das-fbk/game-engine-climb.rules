@@ -43,22 +43,44 @@ function Double getMeteoBonus(String meteo) {
 	return ret;
 }
 
+rule "participation update"
+when
+	Action(id == "PlayerCalendarTrip")
+    InputData( $mode : data["mode"] != null, $date : data["school-date"] != null)
+    $part : PointConcept(name == "participation_count")
+then
+	// here I make sure to set correctly  the flag for participation in the current day
+	if ($part.getPeriodCurrentScore("daily") == 0) {
+		log("apply participation update");
+		$part.setScore($part.getScore() + 1d);
+		update($part);
+		insert(new UpdateTeams("participation"));
+	}
+end
+
+rule "participation update propagation"
+when
+	Member($mode : inputData["mode"] != null, inputData["school-date"] != null)
+	Propagation(action == "participation")
+    Player($playerId : id, team == true)
+    $part : PointConcept(name == "participation_count")
+then
+	log("apply participation update propagation");
+	// here I make sure I update the participation count for the team in the current day
+	$part.setScore($part.getScore() + 1d);
+	update($part);
+    insert(new UpdateTeams());
+end
+
 rule "absence update"
 when
 	Action(id == "PlayerCalendarTrip")
     InputData( $mode : data["mode"] != null, $mode == "absent", $date : data["school-date"] != null)
     $absence : PointConcept(name == "absence_count")
-    $part : PointConcept(name == "participation_count")
 then
 	log("apply absence update");
-	// here I make sure to set correctly  the flag for participation in the current day
-	long now = System.currentTimeMillis();
-	if ($part.getPeriodScore("daily",now) == 0)
-		$part.setScore($part.getScore() + 1d);
-		
 	$absence.setScore($absence.getScore() + 1d);
 	update($absence)
-	update($part);
     insert(new UpdateTeams());
 end
 
@@ -67,15 +89,10 @@ when
 	Member($mode : inputData["mode"] != null, $mode == "absent", inputData["school-date"] != null)
     Player($playerId : id, team == true)
     $absence : PointConcept(name == "absence_count")
-    $part : PointConcept(name == "participation_count")
 then
 	log("apply absence update propagation");
-	// here I make sure I update the participation count for the team in the current day
-	$part.setScore($part.getScore() + 1d);
-		
 	$absence.setScore($absence.getScore() + 1d);
 	update($absence)
-	update($part);
     insert(new UpdateTeams());
 end
 
@@ -88,18 +105,12 @@ when
     $mode_dist : PointConcept(name == (String)$mode + "_distance")
     $mode_trips : PointConcept(name == (String)$mode + "_trips")
     $bonus_dist : PointConcept(name == "bonus_distance")
-    $part: PointConcept(name == "participation_count")
 then
 	String myMode = (String)$mode;
 	String myMeteo = (String)$meteo;
 	Double meteoBonus = 0.0;
 	Double distance = 0.0;
-	
-	// here I make sure to set correctly  the flag for participation in the current day
-	long now = System.currentTimeMillis();
-	if ($part.getPeriodScore("daily",now) == 0)
-		$part.setScore($part.getScore() + 1d);
-	
+		
 	if (myMode.startsWith("zeroImpact") || myMode.equals("pedibus")) {
 		meteoBonus = getMeteoBonus(myMeteo);
 		if (meteoBonus > 0.0) {
@@ -127,7 +138,7 @@ then
     update($mode_trips);
     update($tot_dist);
     update($tot_trips);
-    update($part);
+
     insert(new UpdateTeams());
 end
 
@@ -141,16 +152,12 @@ when
     $mode_dist : PointConcept(name == (String)$mode + "_distance")
     $mode_trips : PointConcept(name == (String)$mode + "_trips")
     $bonus_dist : PointConcept(name == "bonus_distance")
-    $part: PointConcept(name == "participation_count")
 then
     log("apply trip mode update propagation");
 	String myMode = (String)$mode;
 	String myMeteo = (String)$meteo;
 	Double meteoBonus = 0.0;
 	Double distance = 0.0;
-	
-	// here I make sure to update correctly the participation count for the team in the current day
-	$part.setScore($part.getScore() + 1d);
 	
 	if (myMode.startsWith("zeroImpact") || myMode.equals("pedibus")) {
 		meteoBonus = getMeteoBonus(myMeteo);
@@ -174,7 +181,6 @@ then
     update($mode_trips);
     update($tot_dist);
     update($tot_trips);
-    update($part);
-    insert(new UpdateTeams());
 
+    insert(new UpdateTeams());
 end

@@ -11,7 +11,7 @@ when
     $mode_dist : PointConcept(name == "zeroImpact_wAdult_distance")
     $mode_trips : PointConcept(name == "zeroImpact_wAdult_trips")
 then
-	log("apply class trip with " + $num + " participants update");
+	log("apply class trip with " + $num + " participants");
 		
 	//for now no Meteo bonus ???
 	Double tripDistance = (Double)$num * (Double)$distance;
