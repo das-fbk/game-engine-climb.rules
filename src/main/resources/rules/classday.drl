@@ -1,16 +1,17 @@
 package eu.trentorise.game.model
 
-import eu.trentorise.game.notification.BadgeNotification;
+import eu.trentorise.game.notification.MessageNotification;
 
 global String const_school_name;
-global Double const_class_size;
+//global Double const_class_size;
 
 rule "class mode count"
 salience -1000
 when
-	Player($teamId : id, $teamId != const_school_name, team == true)
-	//$ts : TeamState($members : members)
-	$part : PointConcept(name == "participation_count")
+	Game($gameId: id)
+	Player($teamId : id, $teamId != const_school_name, team == true, $class_size : totalMembers)
+	$part : PointConcept(name == "participation_count", $today : getPeriodCurrentScore("daily"),
+		((Double)$today).intValue() == ((Integer)$class_size).intValue() )
 	$absent: PointConcept(name == "absence_count")
 	$zst : PointConcept(name == "zeroImpact_solo_trips")
 	$zat : PointConcept(name == "zeroImpact_wAdult_trips")
@@ -19,17 +20,17 @@ then
 	Double validTrips = $zst.getPeriodCurrentScore("daily") 
 		+ $zat.getPeriodCurrentScore("daily")
 		+ $pt.getPeriodCurrentScore("daily");
-        Double present = const_class_size - $absent.getPeriodCurrentScore("daily");
-	Double todayParticipation = $part.getPeriodCurrentScore("daily");	
+    int present = ((Integer)$class_size).intValue() - $absent.getPeriodCurrentScore("daily").intValue();
 	log("apply \' class mode count \' to class: " + (String)$teamId 
-    		+ " with participation = " + todayParticipation 
-    		+ " and size = " + const_class_size);
-        log ("---> " + (todayParticipation.equals(const_class_size)));
+    		+ " with participation = " + $today
+    		+ " and size = " + $class_size);
 	// only if I have received an action for each student today
-	if( todayParticipation.equals(const_class_size) ) {
-                 log("received all actions and valid = " + validTrips);
-		if (validTrips >= 0.75 * present) {
-				log("BRAVI classe: " + $teamId + " - Oggi avete raggiunto obiettivo di viaggi eco-sostenibili!");
-			}
+    log("received all actions and valid = " + validTrips);
+	if (validTrips >= 0.75 * present) {
+		//log("BRAVI classe: " + $teamId + " - Oggi avete raggiunto obiettivo di viaggi eco-sostenibili!");
+		MessageNotification message = new MessageNotification($gameId, $teamId, "BRAVI! Oggi avete raggiunto obiettivo di viaggi eco-sostenibili!");
+		message.addData("valid_trips", validTrips);
+		message.addData("target_trips", 0.75 *present);
+		insert(message);
 	}
 end

@@ -10,11 +10,15 @@ when
     $tot_trips : PointConcept(name == "total_trips")
     $mode_dist : PointConcept(name == "zeroImpact_wAdult_distance")
     $mode_trips : PointConcept(name == "zeroImpact_wAdult_trips")
+    $bonus_dist : PointConcept(name == "bonus_distance")
 then
 	log("apply class trip with " + $num + " participants");
-		
-	//for now no Meteo bonus ???
-	Double tripDistance = (Double)$num * (Double)$distance;
+	Double meteoBonus = getMeteoBonus((String)$meteo);
+	if (meteoBonus > 0d) {
+		meteoBonus = meteoBonus * (Double)$num;
+		$bonus_dist.setScore($bonus_dist.getScore() + meteoBonus);
+	}
+	Double tripDistance = (Double)$num * (Double)$distance + meteoBonus;
 	$mode_dist.setScore($mode_dist.getScore() + tripDistance);
 	$mode_trips.setScore($mode_trips.getScore() + (Double)$num);
 	$tot_dist.setScore($tot_dist.getScore() + tripDistance);
@@ -24,6 +28,7 @@ then
     update($mode_trips);
     update($tot_dist);
     update($tot_trips);
+    update($bonus_dist);
     insert(new UpdateTeams());	
 end
 
@@ -36,11 +41,15 @@ when
     $tot_trips : PointConcept(name == "total_trips")
     $mode_dist : PointConcept(name == "zeroImpact_wAdult_distance")
     $mode_trips : PointConcept(name == "zeroImpact_wAdult_trips")
+    $bonus_dist : PointConcept(name == "bonus_distance")
 then
 	log("apply class trip with " + $num + " participants update propagation");
-		
-	//for now no Meteo bonus ???
-	Double tripDistance = (Double)$num * (Double)$distance;
+Double meteoBonus = getMeteoBonus((String)$meteo);
+	if (meteoBonus > 0d) {
+		meteoBonus = meteoBonus * (Double)$num;
+		$bonus_dist.setScore($bonus_dist.getScore() + meteoBonus);
+	}	
+	Double tripDistance = (Double)$num * (Double)$distance + meteoBonus;
 	$mode_dist.setScore($mode_dist.getScore() + tripDistance);
 	$mode_trips.setScore($mode_trips.getScore() + (Double)$num);
 	$tot_dist.setScore($tot_dist.getScore() + tripDistance);
@@ -50,5 +59,6 @@ then
     update($mode_trips);
     update($tot_dist);
     update($tot_trips);
+    update($bonus_dist);
     insert(new UpdateTeams());
 end

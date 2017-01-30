@@ -1,6 +1,7 @@
 package  eu.trentorise.game.model
 
 import eu.trentorise.game.notification.BadgeNotification;
+import eu.trentorise.game.notification.MessageNotification;
 
 global String const_school_name;
 global Double const_almost_reached_next_leg;
@@ -20,8 +21,9 @@ when
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-notify-almost leg-1\'");
-    insert(new BadgeNotification($gameId,$teamId, $bc.getName(), 'almost reached Leg_1'));
-    //update( $bc );
+    MessageNotification message = new MessageNotification($gameId,$teamId, 'almost reached');
+    message.addData("leg", "Leg_1");
+    insert(message);
 end
 
 rule "R-add-badge leg-1"
@@ -48,8 +50,9 @@ when
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-notify-almost leg-2\'");
-    insert(new BadgeNotification($gameId,$teamId, $bc.getName(), 'almost reached Leg_2'));
-    //update( $bc );
+    MessageNotification message = new MessageNotification($gameId,$teamId, 'almost reached');
+    message.addData("leg", "Leg_1");
+    insert(message);
 end
 
 rule "R-add-badge leg-2"
@@ -76,8 +79,9 @@ when
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-notify-almost leg-3\'");
-    insert(new BadgeNotification($gameId,$teamId, $bc.getName(), 'almost reached Leg_3'));
-    //update( $bc );
+    MessageNotification message = new MessageNotification($gameId,$teamId, 'almost reached');
+    message.addData("leg", "Leg_1");
+    insert(message);
 end
 
 rule "R-add-badge leg-3"
@@ -104,8 +108,9 @@ when
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-notify-almost leg-4\'");
-    insert(new BadgeNotification($gameId,$teamId, $bc.getName(), 'almost reached Leg_4'));
-    //update( $bc );
+    MessageNotification message = new MessageNotification($gameId,$teamId, 'almost reached');
+    message.addData("leg", "Leg_1");
+    insert(message);
 end
 
 rule "R-add-badge leg-4"
@@ -131,8 +136,9 @@ when
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-notify-almost leg-5\'");
-    insert(new BadgeNotification($gameId,$teamId, $bc.getName(), 'almost reached Leg_5'));
-    //update( $bc );
+    MessageNotification message = new MessageNotification($gameId,$teamId, 'almost reached');
+    message.addData("leg", "Leg_1");
+    insert(message);
 end
 
 rule "R-add-badge leg-5"
