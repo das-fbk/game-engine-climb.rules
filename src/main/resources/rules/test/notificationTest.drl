@@ -1,0 +1,28 @@
+package eu.trentorise.game.model
+
+import eu.trentorise.game.notification.BadgeNotification;
+import eu.trentorise.game.notification.MessageNotification;
+
+rule "notification generate"
+lock-on-active
+when
+	Action(id == "NotificationTest")
+	InputData( $message : data["msg"], $badge: data["badge"] )
+	Player($teamId : id, team == true) // only works with teams
+	Game( $gameId: id)
+	$bc : BadgeCollectionConcept(name == "TestBadges")
+then
+	log("apply \'notification generate\'");
+	if ($message != null) {
+		MessageNotification mn = new MessageNotification($gameId,$teamId, 'this is a test.');
+		mn.addData("msg", $message);
+		insert(mn);
+	}
+	if ($bc != null && $badge != null) {
+		String suffix = "_" + $bc.getBadgeEarned().size();
+		$bc.getBadgeEarned().add((String)$badge + suffix);
+		BadgeNotification bn = new BadgeNotification($gameId, $teamId, $bc.getName(), (String)$badge);
+		update($bc);
+		insert(bn);
+	}		
+end
