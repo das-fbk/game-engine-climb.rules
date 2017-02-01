@@ -3,9 +3,8 @@ package eu.trentorise.game.model
 import eu.trentorise.game.notification.MessageNotification;
 
 global String const_school_name;
-//global Double const_class_size;
 
-rule "class mode count"
+rule "Zero Impact Day Notification"
 salience -1000
 when
 	Game($gameId: id)
@@ -21,16 +20,31 @@ then
 		+ $zat.getPeriodCurrentScore("daily")
 		+ $pt.getPeriodCurrentScore("daily");
     int present = ((Integer)$class_size).intValue() - $absent.getPeriodCurrentScore("daily").intValue();
-	log("apply \' class mode count \' to class: " + (String)$teamId 
-    		+ " with participation = " + $today
-    		+ " and size = " + $class_size);
-	// only if I have received an action for each student today
-    log("received all actions and valid = " + validTrips);
-	if (validTrips >= 0.75 * present) {
-		//log("BRAVI classe: " + $teamId + " - Oggi avete raggiunto obiettivo di viaggi eco-sostenibili!");
-		MessageNotification message = new MessageNotification($gameId, $teamId, "BRAVI! Oggi avete raggiunto obiettivo di viaggi eco-sostenibili!");
+	if (validTrips == present) {
+		log("apply \' Zero Impact Day Notification \' to class: " + (String)$teamId);
+		MessageNotification message = new MessageNotification($gameId, $teamId, 
+			"BRAVI! Oggi avete raggiunto obiettivo di viaggi eco-sostenibili!");
 		message.addData("valid_trips", validTrips);
-		message.addData("target_trips", 0.75 *present);
+		message.addData("target_trips", present);
+		insert(message);
+	}
+end
+
+rule "No Car Day Notification"
+salience -1000
+when
+	Game($gameId: id)
+	Player($teamId : id, $teamId != const_school_name, team == true, $class_size : totalMembers)
+	$part : PointConcept(name == "participation_count", $today : getPeriodCurrentScore("daily"),
+		((Double)$today).intValue() == ((Integer)$class_size).intValue() )
+	$ct : PointConcept(name == "car_trips")
+then
+	Double carTrips = $ct.getPeriodCurrentScore("daily");
+	if (carTrips == 0d) {
+		log("apply \'No Car Day Notification \' to class: " + (String)$teamId);
+		MessageNotification message = new MessageNotification($gameId, $teamId, 
+			"BRAVI! Oggi siete tutti venuti A SCUOLA SENZ'AUTO");
+		message.addData("car_trips", carTrips);
 		insert(message);
 	}
 end

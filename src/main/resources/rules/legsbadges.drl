@@ -4,6 +4,7 @@ import eu.trentorise.game.notification.BadgeNotification;
 import eu.trentorise.game.notification.MessageNotification;
 
 global String const_school_name;
+global Double const_leg_bonus;
 global Double const_almost_reached_next_leg;
 global Double leg_1_distance;
 global Double leg_2_distance;
@@ -51,7 +52,7 @@ when
 then
     log("apply \'R-notify-almost leg-2\'");
     MessageNotification message = new MessageNotification($gameId,$teamId, 'almost reached');
-    message.addData("leg", "Leg_1");
+    message.addData("leg", "Leg_2");
     insert(message);
 end
 
@@ -80,7 +81,7 @@ when
 then
     log("apply \'R-notify-almost leg-3\'");
     MessageNotification message = new MessageNotification($gameId,$teamId, 'almost reached');
-    message.addData("leg", "Leg_1");
+    message.addData("leg", "Leg_3");
     insert(message);
 end
 
@@ -109,7 +110,7 @@ when
 then
     log("apply \'R-notify-almost leg-4\'");
     MessageNotification message = new MessageNotification($gameId,$teamId, 'almost reached');
-    message.addData("leg", "Leg_1");
+    message.addData("leg", "Leg_4");
     insert(message);
 end
 
@@ -137,7 +138,7 @@ when
 then
     log("apply \'R-notify-almost leg-5\'");
     MessageNotification message = new MessageNotification($gameId,$teamId, 'almost reached');
-    message.addData("leg", "Leg_1");
+    message.addData("leg", "Leg_5");
     insert(message);
 end
 
@@ -153,4 +154,18 @@ then
     $bc.getBadgeEarned().add('Leg_5');
     insert(new BadgeNotification($gameId,$teamId,$bc.getName(),'Leg_5'));
     update( $bc );
+end
+
+rule "R-badge-bonus"
+salience -10000
+when
+	BadgeNotification( collectionName == 'LegsToKangole', playerId == const_school_name )
+	$tot_dist : PointConcept(name == "total_distance")
+	$bonus_dist : PointConcept(name == "bonus_distance")
+then
+	log("apply \'R-badge-bonus\'");
+	$bonus_dist.setScore($bonus_dist.getScore() + const_leg_bonus);
+	$tot_dist.setScore($tot_dist.getScore() + const_leg_bonus);
+	update($bonus_dist);
+	update($tot_dist);
 end
