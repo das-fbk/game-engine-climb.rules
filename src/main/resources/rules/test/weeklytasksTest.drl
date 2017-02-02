@@ -7,6 +7,8 @@ import eu.trentorise.game.model.PointConcept.PeriodInstance;
 import java.lang.Math;
 
 global Double const_record_percent;
+global Double const_weekly_nominal_distance;
+global String const_school_name;
 
 function Double findPeriodicMax(PointConcept pc, String pName) {
 	Double ret = 0.0;
@@ -25,7 +27,7 @@ function Double findPeriodicMax(PointConcept pc, String pName) {
 rule "R-weekly-record-distance"
 when
 	Action(id == "WeeklyTaskTest") // simulates triggering of weekly task
-	$id : InputData( $c : data["counter"] )
+	$id : InputData( $c : data["counter"] != null)
 	$pc : PointConcept(name == (String)$c)
 	Player($teamId : id, team == true) // only works with teams
 	Game( $gameId: id)
@@ -36,7 +38,7 @@ then
 	Double current = $pc.getPeriodCurrentScore("weekly");
 	Double max = findPeriodicMax($pc,"weekly");
 	if (current.equals(max)) {
-		MessageNotification mn = new MessageNotification($gameId,$teamId, 'Nuovo record settimanale: ');
+		MessageNotification mn = new MessageNotification($gameId,$teamId, 'Bravi! Nuovo record settimanale: ');
 		mn.addData("score", $c);
 		mn.addData("record", current);
 		insert(mn);
@@ -53,17 +55,42 @@ end
 
 rule "R-weekly-record-propagation"
 when
-	Member( $c : inputData["counter"], $bonus : inputData["bonus"] != null)
+	Member( $c : inputData["counter"] != null, $bonus : inputData["bonus"] != null)
 	$pc : PointConcept(name == (String)$c)
 	Player($teamId : id, team == true) // only works with teams
 	$bd : PointConcept(name == "bonus_distance")
 	$td : PointConcept(name == "total_distance")
 then
 	log("apply \'R-weekly-record-propagation\'");
-	$bd.setScore($bd.getScore() + $bonus);
-	$td.setScore($td.getScore() + $bonus);
+	$bd.setScore($bd.getScore() + (Double)$bonus);
+	$td.setScore($td.getScore() + (Double)$bonus);
 	update($bd);
 	update($td);
 	insert(new UpdateTeams());
 end
 
+
+rule "R-weekly-over-nominal-distance"
+when
+	Action(id == "WeeklyTaskTest")
+	$tot_dist : PointConcept(name == "total_distance")
+	Player($teamId : id, team == true, $teamId == const_school_name) // only applies to school
+	Game( $gameId: id)
+	$bonus_dist : PointConcept(name == "bonus_distance")
+then
+	Double current = $tot_dist.getPeriodCurrentScore("weekly");
+	if (current > const_weekly_nominal_distance) {
+		log("apply \'R-weekly-over-nominal-distance\'");
+		MessageNotification mn = new MessageNotification($gameId,$teamId, 'Bravi! Avete percorso molti Km. questa settimana: ');
+		 mn.addData("score", "total_distance");
+		 mn.addData("traveled", current);
+		 insert(mn);
+		 // assign bonus
+		Double bonus = Math.ceil(current * const_record_percent);
+		$bonus_dist.setScore($bonus_dist.getScore() + bonus);
+		$tot_dist.setScore($tot_dist.getScore() + bonus);
+		update($bonus_dist);
+		update($tot_dist);
+
+	}
+end
