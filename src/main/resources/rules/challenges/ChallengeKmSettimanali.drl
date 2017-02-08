@@ -1,0 +1,51 @@
+package eu.trentorise.game.model
+
+rule 'ch-KmSettimanali-check'
+when
+	$challenge : ChallengeConcept( modelName == "KmSettimanali", $counter: fields["counterName"], 
+		$target: fields["target"], $tt : fields["TargetTeam"], $vp : fields["VirtualPrize"],
+		$periodName: fields["periodName"] , $bonusPointType : fields["bonusPointType"], 
+		$bonusScore : fields["bonusScore"], isCompleted() != true )
+	$id : InputData()
+	$pc1 : PointConcept(name == (String) $counter, $score: score, getPeriodCurrentScore((String)$periodName) >= $target)
+	Player($playerId : id, team == true) // only works with teams
+	Game( $gameId: id)
+	$pc : PointConcept(name == (String) $bonusPointType)
+	$tot_dist : PointConcept(name == "total_distance")
+then
+	log('Challenge KmSettimanali COMPLETED for ' + (String)$tt + " " + (String)$playerId );
+	$challenge.completed();
+	$pc.setScore($pc.getScore() +  (Double)$bonusScore);
+	update($pc);
+	update($challenge);
+	
+	if (! ((String)$bonusPointType).equals("total_distance")) {
+		$tot_dist.setScore($tot_dist.getScore() +  (Double)$bonusScore);
+		update($tot_dist);
+	}
+	MessageNotification mn = new MessageNotification($gameId,$playerId,"ChallengeWon");
+	mn.addData("_VirtualPrize_", $vp);
+	insert(mn);
+	
+	$id.getData().put("bonusScore", $bonusScore);
+	$id.getData().put("bonusPointType", $bonusPointType);
+	insert(new UpdateTeams("Ch-KmSettimanali"));
+end
+
+rule "ch-KmSettimanali-propagation"
+when
+	Member( $bonusPointType : inputData["bonusPointType"], $bonusScore : inputData["bonusScore"])
+	Propagation(action == "Ch-KmSettimanali")
+	$pc : PointConcept(name == (String)$bonusPointType)
+	$tot_dist : PointConcept(name == "total_distance")
+	Player($playerId : id, team == true) 
+then
+	log("apply \'ch-KmSettimanali-propagation\'");
+	$pc.setScore($pc.getScore() + (Double)$bonusScore);
+	update($pc);
+	if (! ((String)$bonusPointType).equals("total_distance")) {
+		$tot_dist.setScore($tot_dist.getScore() +  (Double)$bonusScore);
+		update($tot_dist);
+	}
+	insert(new UpdateTeams("Ch-KmSettimanali"));
+end

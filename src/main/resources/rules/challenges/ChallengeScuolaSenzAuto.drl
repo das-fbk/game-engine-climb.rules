@@ -1,0 +1,48 @@
+package eu.trentorise.game.model
+
+import java.util.ArrayList;
+
+rule 'ch-ScuolaSenzAuto-check'
+salience -1000
+when
+	$challenge : ChallengeConcept( modelName == "ScuolaSenzAuto", isCompleted() != true,
+		$vp : fields["VirtualPrize"])
+	Player($teamId : id, team == true, $class_size : totalMembers)
+	Game( $gameId: id)
+	PointConcept(name == "participation_count", $today : getPeriodCurrentScore("daily"),
+		((Double)$today).intValue() == ((Integer)$class_size).intValue() )
+	$ct : PointConcept(name == "car_trips")
+then
+	Double carTrips = $ct.getPeriodCurrentScore("daily");
+	if (carTrips == 0d) {
+		log("Challenge ScuolaSenzAuto COMPLETED with " + carTrips + " car trips");
+		$challenge.completed();
+		update($challenge);
+	}
+	MessageNotification mn = new MessageNotification($gameId,$teamId,"ChallengeWon");
+	mn.addData("_VirtualPrize_", $vp);
+	insert(mn);
+end
+
+rule 'ch-ScuolaSenzAuto-award'
+salience -5000
+when
+	$challenge : ChallengeConcept( modelName == "ScuolaSenzAuto", isCompleted() == true,
+		$leg : fields["legName"], $vp : fields["VirtualPrize"],
+		$bonusPointType : fields["bonusPointType"], $bonusScore : fields["bonusScore"] )
+	Player($teamId : id, team == true)
+	BadgeCollectionConcept(name == 'LegsToKangole', $bc : badgeEarned)
+	$pc : PointConcept(name == (String) $bonusPointType)
+	$tot_dist : PointConcept(name == "total_distance")
+then
+	log("apply \'ch-ScuolaSenzAuto-award \' ");
+	if ($leg == null || ((ArrayList)$bc).contains((String)$leg)) { //if no leg specified, award immediately
+		$pc.setScore($pc.getScore() +  (Double)$bonusScore);
+		update($pc);
+		if (! ((String)$bonusPointType).equals("total_distance")) {
+			$tot_dist.setScore($tot_dist.getScore() +  (Double)$bonusScore);
+			update($tot_dist);
+		}
+		// no updateTeams() is necessary since this is a SCHOOL challenge only
+	}
+end

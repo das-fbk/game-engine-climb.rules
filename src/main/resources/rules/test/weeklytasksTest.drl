@@ -38,9 +38,9 @@ then
 	Double current = $pc.getPeriodCurrentScore("weekly");
 	Double max = findPeriodicMax($pc,"weekly");
 	if (current.equals(max)) {
-		MessageNotification mn = new MessageNotification($gameId,$teamId, 'Bravi! Nuovo record settimanale: ');
-		mn.addData("score", $c);
-		mn.addData("record", current);
+		MessageNotification mn = new MessageNotification($gameId,$teamId, 'WeeklyRecordClass');
+		mn.addData("_score_type_", $c);
+		mn.addData("_record_", current);
 		insert(mn);
 		// assign bonus
 		Double bonus = Math.ceil(current * const_record_percent);
@@ -81,9 +81,9 @@ then
 	Double current = $tot_dist.getPeriodCurrentScore("weekly");
 	if (current > const_weekly_nominal_distance) {
 		log("apply \'R-weekly-over-nominal-distance\'");
-		MessageNotification mn = new MessageNotification($gameId,$teamId, 'Bravi! Avete percorso molti Km. questa settimana: ');
-		 mn.addData("score", "total_distance");
-		 mn.addData("traveled", current);
+		MessageNotification mn = new MessageNotification($gameId,$teamId, 'WeeklyPerformanceSchool');
+		 mn.addData("_score_type_", "total_distance");
+		 mn.addData("_performance_", current);
 		 insert(mn);
 		 // assign bonus
 		Double bonus = Math.ceil(current * const_record_percent);

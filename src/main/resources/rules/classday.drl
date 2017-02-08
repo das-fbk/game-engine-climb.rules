@@ -3,6 +3,8 @@ package eu.trentorise.game.model
 import eu.trentorise.game.notification.MessageNotification;
 
 global String const_school_name;
+global Doubla const_NoCarDayClass_bonus;
+global Doubla const_ZeroImpactDayClass_bonus;
 
 rule "Zero Impact Day Notification"
 salience -1000
@@ -15,6 +17,8 @@ when
 	$zst : PointConcept(name == "zeroImpact_solo_trips")
 	$zat : PointConcept(name == "zeroImpact_wAdult_trips")
 	$pt : PointConcept(name == "pedibus_trips")
+	$bonus_dist : PointConcept(name == "bonus_distance")
+	$tot_dist : PointConcept(name == "total_distance")
 then
 	Double validTrips = $zst.getPeriodCurrentScore("daily") 
 		+ $zat.getPeriodCurrentScore("daily")
@@ -22,12 +26,31 @@ then
     int present = ((Integer)$class_size).intValue() - $absent.getPeriodCurrentScore("daily").intValue();
 	if (validTrips == present) {
 		log("apply \' Zero Impact Day Notification \' to class: " + (String)$teamId);
-		MessageNotification message = new MessageNotification($gameId, $teamId, 
-			"BRAVI! Oggi avete raggiunto obiettivo di viaggi eco-sostenibili!");
-		message.addData("valid_trips", validTrips);
-		message.addData("target_trips", present);
+		$bonus_dist.setScore($bonus_dist.GetScore() + const_ZeroImpactDayClass_bonus);
+		$tot_dist.setScore($tot_dist.GetScore() + const_ZeroImpactDayClass_bonus);
+		
+		MessageNotification message = new MessageNotification($gameId, $teamId, "ZeroImpactDayClass");
+		message.addData("_bonus_", (const_ZeroImpactDayClass_bonus / 1000.0));
+		update($bonus_dist);
+		update($tot_dist);
 		insert(message);
+		insert(new UpdateTeams("ZeroImpactDay"));
 	}
+end
+
+rule "Zero Impact Day propagation"
+salience -1000
+when
+	Propagation(action == "ZeroImpactDay")
+	Player($teamId : id, team == true) // only works with teams
+	$bonus_dist : PointConcept(name == "bonus_distance")
+	$tot_dist : PointConcept(name == "total_distance")
+then
+	log("apply \' Zero Impact Day propagation \' ");
+	$bonus_dist.setScore($bonus_dist.GetScore() + const_ZeroImpactDayClass_bonus);
+	$tot_dist.setScore($tot_dist.GetScore() + const_ZeroImpactDayClass_bonus);
+	update($bonus_dist);
+	update($tot_dist);
 end
 
 rule "No Car Day Notification"
@@ -38,13 +61,35 @@ when
 	$part : PointConcept(name == "participation_count", $today : getPeriodCurrentScore("daily"),
 		((Double)$today).intValue() == ((Integer)$class_size).intValue() )
 	$ct : PointConcept(name == "car_trips")
+	$bonus_dist : PointConcept(name == "bonus_distance")
+	$tot_dist : PointConcept(name == "total_distance")
 then
 	Double carTrips = $ct.getPeriodCurrentScore("daily");
 	if (carTrips == 0d) {
 		log("apply \'No Car Day Notification \' to class: " + (String)$teamId);
-		MessageNotification message = new MessageNotification($gameId, $teamId, 
-			"BRAVI! Oggi siete tutti venuti A SCUOLA SENZ'AUTO");
-		message.addData("car_trips", carTrips);
+		$bonus_dist.setScore($bonus_dist.GetScore() + const_NoCarDayClass_bonus);
+		$tot_dist.setScore($tot_dist.GetScore() + const_NoCarDayClass_bonus);
+		
+		MessageNotification message = new MessageNotification($gameId, $teamId, "NoCarDayClass");
+		message.addData("_bonus_", (const_NoCarDayClass_bonus / 1000.0));
+		update($bonus_dist);
+		update($tot_dist);
 		insert(message);
+		insert(new UpdateTeams("NoCarDay"));
 	}
+end
+
+rule "No Car Day propagation"
+salience -1000
+when
+	Propagation(action == "NoCarDay")
+	Player($teamId : id, team == true) // only works with teams
+	$bonus_dist : PointConcept(name == "bonus_distance")
+	$tot_dist : PointConcept(name == "total_distance")
+then
+	log("apply \'No Car Day propagation \' ");
+	$bonus_dist.setScore($bonus_dist.GetScore() + const_NoCarDayClass_bonus);
+	$tot_dist.setScore($tot_dist.GetScore() + const_NoCarDayClass_bonus);
+	update($bonus_dist);
+	update($tot_dist);
 end

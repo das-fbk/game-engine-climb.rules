@@ -22,8 +22,8 @@ when
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-notify-almost leg-1\'");
-    MessageNotification message = new MessageNotification($gameId,$teamId, 'almost reached');
-    message.addData("leg", "Leg_1");
+    MessageNotification message = new MessageNotification($gameId,$teamId, 'AlmostReachedLeg');
+    message.addData("_leg_", "Leg_1");
     insert(message);
 end
 
@@ -51,8 +51,8 @@ when
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-notify-almost leg-2\'");
-    MessageNotification message = new MessageNotification($gameId,$teamId, 'almost reached');
-    message.addData("leg", "Leg_2");
+    MessageNotification message = new MessageNotification($gameId,$teamId, 'AlmostReachedLeg');
+    message.addData("_leg_", "Leg_2");
     insert(message);
 end
 
@@ -80,8 +80,8 @@ when
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-notify-almost leg-3\'");
-    MessageNotification message = new MessageNotification($gameId,$teamId, 'almost reached');
-    message.addData("leg", "Leg_3");
+    MessageNotification message = new MessageNotification($gameId,$teamId, 'AlmostReachedLeg');
+    message.addData("_leg_", "Leg_3");
     insert(message);
 end
 
@@ -109,8 +109,8 @@ when
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-notify-almost leg-4\'");
-    MessageNotification message = new MessageNotification($gameId,$teamId, 'almost reached');
-    message.addData("leg", "Leg_4");
+    MessageNotification message = new MessageNotification($gameId,$teamId, 'AlmostReachedLeg');
+    message.addData("_leg_", "Leg_4");
     insert(message);
 end
 
@@ -137,8 +137,8 @@ when
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-notify-almost leg-5\'");
-    MessageNotification message = new MessageNotification($gameId,$teamId, 'almost reached');
-    message.addData("leg", "Leg_5");
+    MessageNotification message = new MessageNotification($gameId,$teamId, 'AlmostReachedLeg');
+    message.addData("_leg_", "Leg_5");
     insert(message);
 end
 
