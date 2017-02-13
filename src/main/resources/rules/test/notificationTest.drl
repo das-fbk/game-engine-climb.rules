@@ -4,6 +4,9 @@ import eu.trentorise.game.notification.BadgeNotification;
 import eu.trentorise.game.notification.MessageNotification;
 
 rule "MessageNotification test generate"
+// rule for stubbing the issuing of MessageNotification
+// uses a dummy action "NotificationTest" as trigger, with parameter
+// "type" to differnetiate the various notifications in the game
 lock-on-active
 when
 	Action(id == "NotificationTest")
@@ -34,6 +37,9 @@ then
 end
 
 rule "BadgeNotification test generate"
+// rule for stubbing the issuing of BadgeNotification
+// uses a dummy action "NotificationTest" as trigger, with parameter
+// "badge" which hold the name of the badge
 lock-on-active
 when
 	Action(id == "NotificationTest")

@@ -11,6 +11,8 @@ global Double const_weekly_nominal_distance;
 global String const_school_name;
 
 function Double findPeriodicMax(PointConcept pc, String pName) {
+// finds the maximum value in the history of a Periodic Point Concept
+// for a given period name
 	Double ret = 0.0;
 	PeriodInstance pi = pc.getPeriodCurrentInstance(pName);
 	int i = pi.getIndex();
@@ -25,6 +27,11 @@ function Double findPeriodicMax(PointConcept pc, String pName) {
 }
 
 rule "R-weekly-record-distance"
+// checks if a team has reached its new WEEKLY record for a given counter
+// In that case, awards a bonus and sends out a MessageNotification
+// Can apply to CLASSES or SCHOOL
+// assumes a WEEKLY TASK as a trigger which is
+// currently stubbed by a dummy action "WeeklyTaskTest" with parameter "counter"
 when
 	Action(id == "WeeklyTaskTest") // simulates triggering of weekly task
 	$id : InputData( $c : data["counter"] != null)
@@ -71,6 +78,11 @@ end
 
 
 rule "R-weekly-over-nominal-distance"
+// checks if the SCHOOL has reached a  WEEKLY TOTAL distance 
+// that exceeds a certain constant, i.e., const_weekly_nominal_distance 
+// In that case, awards a bonus and sends out a MessageNotification
+// assumes a WEEKLY TASK as a trigger which is
+// currently stubbed by a dummy action "WeeklyTaskTest" 
 when
 	Action(id == "WeeklyTaskTest")
 	$tot_dist : PointConcept(name == "total_distance")

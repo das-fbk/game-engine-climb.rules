@@ -1,13 +1,16 @@
 package eu.trentorise.game.model
 
 rule 'ch-KmSettimanali-check'
+// this is WEEKLY challenge for TEAMS --> classes or school
+// if classes, reward must be propagated up to school
+
 when
 	$challenge : ChallengeConcept( modelName == "KmSettimanali", $counter: fields["counterName"], 
 		$target: fields["target"], $tt : fields["TargetTeam"], $vp : fields["VirtualPrize"],
 		$periodName: fields["periodName"] , $bonusPointType : fields["bonusPointType"], 
 		$bonusScore : fields["bonusScore"], isCompleted() != true )
 	$id : InputData()
-	$pc1 : PointConcept(name == (String) $counter, $score: score, getPeriodCurrentScore((String)$periodName) >= $target)
+	$pc1 : PointConcept(name == (String) $counter, getPeriodCurrentScore((String)$periodName) >= $target)
 	Player($playerId : id, team == true) // only works with teams
 	Game( $gameId: id)
 	$pc : PointConcept(name == (String) $bonusPointType)
