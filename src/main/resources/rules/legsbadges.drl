@@ -8,7 +8,7 @@ global Double const_leg_bonus;
 global Double const_almost_reached_next_leg;
 // TRIP LEGS
 global Double Verona_distance;
-global Double Foce_del_Po_distance;
+global Double Foce_Del_Po_distance;
 global Double San_Marino_distance;
 global Double Pescia_distance;
 global Double Volterra_distance;
@@ -25,7 +25,7 @@ global Double Assuan_distance;
 global Double Al_Goled_distance;
 global Double Meroe_distance;
 global Double Dinder_distance;
-global Double Boma_distanc;
+global Double Boma_distance;
 global Double Kangole_distance;
 
 //add leg badge rules
@@ -348,7 +348,7 @@ rule "R-notify-almost Reggio Calabria"
 when 
 	$bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Reggio Calabria') 
     PointConcept(name == 'total_distance', 
-    	score > Reggio_Calabra_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < Reggio_Calabria_distance)
+    	score > Reggio_Calabria_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < Reggio_Calabria_distance)
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then

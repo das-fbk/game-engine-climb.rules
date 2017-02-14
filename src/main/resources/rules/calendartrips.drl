@@ -69,7 +69,7 @@ then
 	// here I make sure I update the participation count for the team in the current day
 	$part.setScore($part.getScore() + 1d);
 	update($part);
-    insert(new UpdateTeams());
+    insert(new UpdateTeams("participation"));
 end
 
 rule "absence update"
