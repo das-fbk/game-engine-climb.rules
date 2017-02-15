@@ -1,0 +1,16 @@
+package eu.trentorise.game.model
+
+global String const_school_name;
+
+rule "test_no_car_day_counter"
+salience 10
+when
+	Action(id == "NoCarCounterTest")
+	InputData( $num : data["no_car_total"] != null)
+	Player($teamId : id, team == true, $teamId == const_school_name) // only works with SCHOOL
+	$pc : PointConcept(name == "no_car_classes")
+then
+	log("apply \'test_no_car_day_counter\'");
+	$pc.setScore((Double) $num);
+	update($pc);
+end

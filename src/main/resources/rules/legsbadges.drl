@@ -303,7 +303,8 @@ rule "R-add-badge Kangole"
 when 
     PointConcept(name == 'total_distance', score >= Kangole_distance)
     $bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Kangole') 
-
+    Game( $gameId: id)
+    Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-add-badge Kangole\'");
     $bc.getBadgeEarned().add('Kangole');
