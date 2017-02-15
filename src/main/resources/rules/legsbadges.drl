@@ -1,5 +1,7 @@
 package  eu.trentorise.game.model
 
+import java.util.HashSet;
+
 import eu.trentorise.game.notification.BadgeNotification;
 import eu.trentorise.game.notification.MessageNotification;
 
@@ -29,11 +31,12 @@ global Double Boma_distance;
 global Double Kangole_distance;
 
 //add leg badge rules
+//only for SCHOOL
 rule "R-add-badge Verona"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Verona_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Verona') 
+    $bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Verona')
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -253,6 +256,20 @@ then
     update( $bc );
 end
 
+rule "R-add-badge Meroe"
+	salience -1000
+when 
+    PointConcept(name == 'total_distance', score >= Meroe_distance)
+    $bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Meroe') 
+    Game( $gameId: id)
+    Player( $teamId : id, $teamId == const_school_name, team == true )
+then
+    log("apply \'R-add-badge Meroe\'");
+    $bc.getBadgeEarned().add('Meroe');
+    insert(new BadgeNotification($gameId,$teamId, $bc.getName(), 'Meroe'));
+    update( $bc );
+end
+
 rule "R-add-badge Dinder"
 	salience -1000
 when 
@@ -286,8 +303,7 @@ rule "R-add-badge Kangole"
 when 
     PointConcept(name == 'total_distance', score >= Kangole_distance)
     $bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Kangole') 
-    Game( $gameId: id)
-    Player( $teamId : id, $teamId == const_school_name, team == true )
+
 then
     log("apply \'R-add-badge Kangole\'");
     $bc.getBadgeEarned().add('Kangole');
@@ -295,35 +311,72 @@ then
     update( $bc );
 end
 
-
-rule "R-add-badge Meroe"
-	salience -1000
-when 
-    PointConcept(name == 'total_distance', score >= Meroe_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Meroe') 
-    Game( $gameId: id)
+rule "R-GAME-END"
+//special END-OF-GAME MessageNotification for SCHOOL
+// minimal salience to guarantee the MessageNotification is the last seen
+salience -10000
+when
+	BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned contains 'Kangole')
+	Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
+    $cd : CustomData()
+    $tot_dist : PointConcept(name == 'total_distance')
 then
-    log("apply \'R-add-badge Meroe\'");
-    $bc.getBadgeEarned().add('Meroe');
-    insert(new BadgeNotification($gameId,$teamId, $bc.getName(), 'Meroe'));
-    update( $bc );
+	log("apply \'R-GAME-END\'");
+	$cd.put("game_finished", new Boolean(true));
+	MessageNotification message = new MessageNotification($gameId,$teamId, 'GameFinished');
+    message.addData("_totalKm_", $tot_dist.getScore());
+    insert(message);
+	
 end
 
 
 // almost reached leg rules
+//inserts a Custom Data with the name of the leg to avoid duplicate notifications
+// only for SCHOOL
 rule "R-notify-almost Verona"
 	salience -2000
 when 
 	$bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Verona') 
     PointConcept(name == 'total_distance', 
     	score > Verona_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < Verona_distance)
+    $cd: CustomData($almost : this["almost_reached_legs"] == null || !((HashSet)$almost).contains("Verona")) 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-notify-almost Verona\'");
+    HashSet hs = (HashSet)$almost;
+    if (hs==null) { 
+    	hs = new HashSet();
+    	$cd.put("almost_reached_legs", hs);
+    }
+    hs.add("Verona");
+	
     MessageNotification message = new MessageNotification($gameId,$teamId, 'AlmostReachedLeg');
     message.addData("_leg_", "Verona");
+    insert(message);
+end
+
+rule "R-notify-almost Foce del Po"
+	salience -2000
+when 
+	$bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Foce del Po') 
+    PointConcept(name == 'total_distance', 
+    	score > Foce_Del_Po_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < Foce_Del_Po_distance)
+    $cd: CustomData($almost : this["almost_reached_legs"] ==null || !((HashSet)$almost).contains("Foce del Po")) 
+    Game( $gameId: id)
+    Player( $teamId : id, $teamId == const_school_name, team == true )
+then
+    log("apply \'R-notify-almost Foce del Po\'");
+    HashSet hs = (HashSet)$almost;
+    if (hs==null) {
+    	hs = new HashSet();
+    	$cd.put("almost_reached_legs", hs);
+    }
+    hs.add("Foce del Po");
+	
+    MessageNotification message = new MessageNotification($gameId,$teamId, 'AlmostReachedLeg');
+    message.addData("_leg_", "Foce del Po");
     insert(message);
 end
 
@@ -333,10 +386,18 @@ when
 	$bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Roma') 
     PointConcept(name == 'total_distance', 
     	score > Roma_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < Roma_distance)
+    $cd: CustomData($almost : this["almost_reached_legs"] ==null || !((HashSet)$almost).contains("Roma")) 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-notify-almost Roma\'");
+    HashSet hs = (HashSet)$almost;
+    if (hs==null) {
+    	hs = new HashSet();
+    	$cd.put("almost_reached_legs", hs);
+    }
+    hs.add("Roma");
+    
     MessageNotification message = new MessageNotification($gameId,$teamId, 'AlmostReachedLeg');
     message.addData("_leg_", "Roma");
     insert(message);
@@ -349,10 +410,18 @@ when
 	$bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Reggio Calabria') 
     PointConcept(name == 'total_distance', 
     	score > Reggio_Calabria_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < Reggio_Calabria_distance)
+    $cd: CustomData($almost : this["almost_reached_legs"] ==null || !((HashSet)$almost).contains("Reggio Calabria")) 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-notify-almost Reggio Calabria\'");
+    HashSet hs = (HashSet)$almost;
+    if (hs==null) {
+    	hs = new HashSet();
+    	$cd.put("almost_reached_legs", hs);
+    }
+    hs.add("Reggio Calabria");
+    
     MessageNotification message = new MessageNotification($gameId,$teamId, 'AlmostReachedLeg');
     message.addData("_leg_", "Reggio Calabria");
     insert(message);
@@ -364,10 +433,18 @@ when
 	$bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Al Goled') 
     PointConcept(name == 'total_distance', 
     	score > Al_Goled_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < Al_Goled_distance)
+    $cd: CustomData($almost : this["almost_reached_legs"] ==null || !((HashSet)$almost).contains("Al Goled")) 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-notify-almost Al Goled\'");
+    HashSet hs = (HashSet)$almost;
+    if (hs==null) {
+    	hs = new HashSet();
+    	$cd.put("almost_reached_legs", hs);
+    }
+    hs.add("Al Goled");
+    
     MessageNotification message = new MessageNotification($gameId,$teamId, 'AlmostReachedLeg');
     message.addData("_leg_", "Al Goled");
     insert(message);
@@ -379,10 +456,18 @@ when
 	$bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Meroe') 
     PointConcept(name == 'total_distance', 
     	score > Meroe_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < Meroe_distance)
+    $cd: CustomData($almost : this["almost_reached_legs"] ==null || !((HashSet)$almost).contains("Meroe")) 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-notify-almost Meroe\'");
+    HashSet hs = (HashSet)$almost;
+    if (hs==null) {
+    	hs = new HashSet();
+    	$cd.put("almost_reached_legs", hs);
+    }
+    hs.add("Meroe");
+    
     MessageNotification message = new MessageNotification($gameId,$teamId, 'AlmostReachedLeg');
     message.addData("_leg_", "Meroe");
     insert(message);
@@ -394,10 +479,18 @@ when
 	$bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Dinder') 
     PointConcept(name == 'total_distance', 
     	score > Dinder_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < Dinder_distance)
+    $cd: CustomData($almost : this["almost_reached_legs"] ==null || !((HashSet)$almost).contains("Dinder")) 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-notify-almost Dinder\'");
+    HashSet hs = (HashSet)$almost;
+    if (hs==null) {
+    	hs = new HashSet();
+    	$cd.put("almost_reached_legs", hs);
+    }
+    hs.add("Dinder");
+    
     MessageNotification message = new MessageNotification($gameId,$teamId, 'AlmostReachedLeg');
     message.addData("_leg_", "Dinder");
     insert(message);
@@ -409,10 +502,18 @@ when
 	$bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Boma') 
     PointConcept(name == 'total_distance', 
     	score > Boma_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < Boma_distance)
+    $cd: CustomData($almost : this["almost_reached_legs"] ==null || !((HashSet)$almost).contains("Boma")) 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-notify-almost Boma\'");
+    HashSet hs = (HashSet)$almost;
+    if (hs==null) {
+    	hs = new HashSet();
+    	$cd.put("almost_reached_legs", hs);
+    }
+    hs.add("Boma");
+    
     MessageNotification message = new MessageNotification($gameId,$teamId, 'AlmostReachedLeg');
     message.addData("_leg_", "Boma");
     insert(message);
@@ -424,14 +525,23 @@ when
 	$bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Kangole') 
     PointConcept(name == 'total_distance', 
     	score > Kangole_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < Kangole_distance)
+    $cd: CustomData($almost : this["almost_reached_legs"] ==null || !((HashSet)$almost).contains("Kangole")) 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-notify-almost Kangole\'");
+    HashSet hs = (HashSet)$almost;
+    if (hs==null) {
+    	hs = new HashSet();
+    	$cd.put("almost_reached_legs", hs);
+    }
+    hs.add("Kangole");
+    
     MessageNotification message = new MessageNotification($gameId,$teamId, 'AlmostReachedLeg');
     message.addData("_leg_", "Kangole");
     insert(message);
 end
+
 
 //assigns a bonus to the SCHOOL for each reached leg
 rule "R-badge-bonus"
