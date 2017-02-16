@@ -7,10 +7,9 @@ when
     InputData( $distance : data["class-distance"] != null, 
     	$num : data["participants"]!= null, $meteo : data["meteo"] != null, $date : data["school-date"] != null )
     $tot_dist : PointConcept(name == "total_distance")
-    $tot_trips : PointConcept(name == "total_trips")
     $mode_dist : PointConcept(name == "zeroImpact_wAdult_distance")
-    $mode_trips : PointConcept(name == "zeroImpact_wAdult_trips")
     $bonus_dist : PointConcept(name == "bonus_distance")
+    $trips : PointConcept(name == "group_trips")
 then
 	log("apply class trip with " + $num + " participants");
 	Double meteoBonus = getMeteoBonus((String)$meteo);
@@ -20,15 +19,13 @@ then
 	}
 	Double tripDistance = (Double)$num * (Double)$distance + meteoBonus;
 	$mode_dist.setScore($mode_dist.getScore() + tripDistance);
-	$mode_trips.setScore($mode_trips.getScore() + (Double)$num);
+	$trips.setScore($mode_trips.getScore() + (Double)$num);
 	$tot_dist.setScore($tot_dist.getScore() + tripDistance);
-	$tot_trips.setScore($tot_trips.getScore() + (Double)$num);
 
     update($mode_dist);
-    update($mode_trips);
     update($tot_dist);
-    update($tot_trips);
     update($bonus_dist);
+    update($trips);
     insert(new UpdateTeams());	
 end
 
@@ -38,10 +35,9 @@ when
     	$num : inputData["participants"]!= null, $meteo : inputData["meteo"] != null, $date : inputData["school-date"] != null )
     Player($playerId : id, team == true)
     $tot_dist : PointConcept(name == "total_distance")
-    $tot_trips : PointConcept(name == "total_trips")
     $mode_dist : PointConcept(name == "zeroImpact_wAdult_distance")
-    $mode_trips : PointConcept(name == "zeroImpact_wAdult_trips")
     $bonus_dist : PointConcept(name == "bonus_distance")
+    $trips : PointConcept(name == "group_trips")
 then
 	log("apply class trip with " + $num + " participants update propagation");
 Double meteoBonus = getMeteoBonus((String)$meteo);
@@ -51,14 +47,12 @@ Double meteoBonus = getMeteoBonus((String)$meteo);
 	}	
 	Double tripDistance = (Double)$num * (Double)$distance + meteoBonus;
 	$mode_dist.setScore($mode_dist.getScore() + tripDistance);
-	$mode_trips.setScore($mode_trips.getScore() + (Double)$num);
 	$tot_dist.setScore($tot_dist.getScore() + tripDistance);
-	$tot_trips.setScore($tot_trips.getScore() + (Double)$num);
+	$trips.setScore($tot_trips.getScore() + (Double)$num);
 
     update($mode_dist);
-    update($mode_trips);
     update($tot_dist);
-    update($tot_trips);
     update($bonus_dist);
+    update($trips);
     insert(new UpdateTeams());
 end

@@ -33,7 +33,7 @@ then
 		$tot_dist.setScore($tot_dist.getScore() + const_ZeroImpactDayClass_bonus);
 		
 		MessageNotification message = new MessageNotification($gameId, $teamId, "ZeroImpactDayClass");
-		message.addData("_bonus_", (const_ZeroImpactDayClass_bonus / 1000.0));
+		message.addData("_bonus_", (const_ZeroImpactDayClass_bonus));
 		update($bonus_dist);
 		update($tot_dist);
 		insert(message);
@@ -76,7 +76,7 @@ then
 		$tot_dist.setScore($tot_dist.getScore() + const_NoCarDayClass_bonus);
 		
 		MessageNotification message = new MessageNotification($gameId, $teamId, "NoCarDayClass");
-		message.addData("_bonus_", (const_NoCarDayClass_bonus / 1000.0));
+		message.addData("_bonus_", (const_NoCarDayClass_bonus));
 		update($bonus_dist);
 		update($tot_dist);
 		insert(message);
