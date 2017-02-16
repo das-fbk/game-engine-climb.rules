@@ -19,7 +19,7 @@ then
 	}
 	Double tripDistance = (Double)$num * (Double)$distance + meteoBonus;
 	$mode_dist.setScore($mode_dist.getScore() + tripDistance);
-	$trips.setScore($mode_trips.getScore() + (Double)$num);
+	$trips.setScore($trips.getScore() + (Double)$num);
 	$tot_dist.setScore($tot_dist.getScore() + tripDistance);
 
     update($mode_dist);
@@ -48,7 +48,7 @@ Double meteoBonus = getMeteoBonus((String)$meteo);
 	Double tripDistance = (Double)$num * (Double)$distance + meteoBonus;
 	$mode_dist.setScore($mode_dist.getScore() + tripDistance);
 	$tot_dist.setScore($tot_dist.getScore() + tripDistance);
-	$trips.setScore($tot_trips.getScore() + (Double)$num);
+	$trips.setScore($trips.getScore() + (Double)$num);
 
     update($mode_dist);
     update($tot_dist);

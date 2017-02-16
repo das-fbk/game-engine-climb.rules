@@ -3,8 +3,10 @@ package eu.trentorise.game.model
 import eu.trentorise.game.notification.MessageNotification;
 import eu.trentorise.game.model.PointConcept;
 import eu.trentorise.game.model.PointConcept.PeriodInstance;
+import eu.trentorise.game.task.Classification;
 
 import java.lang.Math;
+import java.util.HashMap;
 
 global Double const_record_percent;
 global Double const_weekly_nominal_distance;
@@ -33,8 +35,8 @@ rule "R-weekly-record-distance"
 // assumes a WEEKLY TASK as a trigger which is
 // currently stubbed by a dummy action "WeeklyTaskTest" with parameter "counter"
 when
-	Classification(name == 'team classification weekly', $c : scoreType, position <=6) //only first 6 (SCHOOL + classes)
-	$pc : PointConcept(name == (String)$c)
+	Classification(name == 'team classification weekly', $counter : scoreType, position <=6) //only first 6 (SCHOOL + classes)
+	$pc : PointConcept(name == (String) $counter )
 	Player($teamId : id, team == true) // only works with teams
 	Game( $gameId: id)
 	$bd : PointConcept(name == "bonus_distance")
@@ -45,7 +47,7 @@ then
 	Double max = findPeriodicMax($pc,"weekly");
 	if (current.equals(max)) {
 		MessageNotification mn = new MessageNotification($gameId,$teamId, 'WeeklyRecordClass');
-		mn.addData("_score_type_", $c);
+		mn.addData("_score_type_", $counter);
 		mn.addData("_record_", current);
 		insert(mn);
 		// assign bonus
@@ -54,15 +56,19 @@ then
 		$td.setScore($td.getScore() + bonus);
 		update($bd);
 		update($td);
-		$id.getData().put("bonus", bonus);
+		HashMap hm = new HashMap();
+		hm.put("counter", $counter);
+		hm.put("bonus", bonus);
+		InputData id = new InputData(hm);
+		insert(id);
 		insert(new UpdateTeams());
 	}
 end
 
 rule "R-weekly-record-propagation"
 when
-	Member( $c : inputData["counter"] != null, $bonus : inputData["bonus"] != null)
-	$pc : PointConcept(name == (String)$c)
+	Member( $counter : inputData["counter"] != null, $bonus : inputData["bonus"] != null)
+	$pc : PointConcept(name == (String)$counter)
 	Player($teamId : id, team == true) // only works with teams
 	$bd : PointConcept(name == "bonus_distance")
 	$td : PointConcept(name == "total_distance")
