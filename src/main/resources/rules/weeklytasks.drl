@@ -32,13 +32,12 @@ rule "R-weekly-record-distance"
 // checks if a team has reached its new WEEKLY record for a given counter
 // In that case, awards a bonus and sends out a MessageNotification
 // Can apply to CLASSES or SCHOOL
-// assumes a WEEKLY TASK as a trigger which is
-// currently stubbed by a dummy action "WeeklyTaskTest" with parameter "counter"
 when
 	Classification(name == 'team classification weekly', $counter : scoreType, position <=6) //only first 6 (SCHOOL + classes)
 	$pc : PointConcept(name == (String) $counter )
 	Player($teamId : id, team == true) // only works with teams
 	Game( $gameId: id)
+	$id : InputData()
 	$bd : PointConcept(name == "bonus_distance")
 	$td : PointConcept(name == "total_distance")
 then
@@ -54,13 +53,10 @@ then
 		Double bonus = Math.ceil(current * const_record_percent);
 		$bd.setScore($bd.getScore() + bonus);
 		$td.setScore($td.getScore() + bonus);
+		$id.getData().put("counter", $counter);
+		$id.getData().put("bonus", bonus);
 		update($bd);
 		update($td);
-		HashMap hm = new HashMap();
-		hm.put("counter", $counter);
-		hm.put("bonus", bonus);
-		InputData id = new InputData(hm);
-		insert(id);
 		insert(new UpdateTeams());
 	}
 end
@@ -86,8 +82,6 @@ rule "R-weekly-over-nominal-distance"
 // checks if the SCHOOL has reached a  WEEKLY TOTAL distance 
 // that exceeds a certain constant, i.e., const_weekly_nominal_distance 
 // In that case, awards a bonus and sends out a MessageNotification
-// assumes a WEEKLY TASK as a trigger which is
-// currently stubbed by a dummy action "WeeklyTaskTest" 
 when
 	Classification(name == 'team classification weekly', position <=6) //only first 6 (SCHOOL + classes)
 	$tot_dist : PointConcept(name == "total_distance")
@@ -108,6 +102,5 @@ then
 		$tot_dist.setScore($tot_dist.getScore() + bonus);
 		update($bonus_dist);
 		update($tot_dist);
-
 	}
 end

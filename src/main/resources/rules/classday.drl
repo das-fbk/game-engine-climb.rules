@@ -12,6 +12,7 @@ rule "Zero Impact Day Notification"
 // using zero-impact modes
 salience -1000
 when
+	Action(id == "PlayerCalendarTrip") //evaluate only when calendar data are sent
 	Game($gameId: id)
 	Player($teamId : id, $teamId != const_school_name, team == true, $class_size : totalMembers)
 	$part : PointConcept(name == "participation_count", $today : getPeriodCurrentScore("daily"),
@@ -61,6 +62,7 @@ rule "No Car Day Notification"
 // in case  a whole CLASS comes to school avoiding private car
 salience -1000
 when
+	Action(id == "PlayerCalendarTrip") //evaluate only when calendar data are sent
 	Game($gameId: id)
 	Player($teamId : id, $teamId != const_school_name, team == true, $class_size : totalMembers)
 	$part : PointConcept(name == "participation_count", $today : getPeriodCurrentScore("daily"),

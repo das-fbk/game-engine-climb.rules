@@ -38,7 +38,7 @@ const_record_percent=0.05
 const_pedibus_multiplier = 1.5 
 
 #name of the school team/player
-const_school_name=scuola
+const_school_name=Scuola Primaria 'San Vigilio' di Vela
 
 # bonus for NoCarDayClass
 const_NoCarDayClass_bonus = 5000.0
