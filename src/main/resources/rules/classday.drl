@@ -24,7 +24,7 @@ when
 	$ct: PointConcept(name == "car_trips")
 	$bonus_dist : PointConcept(name == "bonus_distance")
 	$tot_dist : PointConcept(name == "total_distance")
-	$id : InputData();
+	$id : InputData()
 then
 	Double carTrips = $ct.getPeriodCurrentScore("daily");
 	if (carTrips == 0d) { // it is a NO CAR day for this class
@@ -65,7 +65,7 @@ when
 	$tot_dist : PointConcept(name == "total_distance")
 then
 	log("apply \' Zero Impact or No Car Day propagation \' ");
-	$bonus_dist.setScore($bonus_dist.getScore() + (Double)$bonus;
+	$bonus_dist.setScore($bonus_dist.getScore() + (Double)$bonus);
 	$tot_dist.setScore($tot_dist.getScore() + (Double)$bonus);
 	update($bonus_dist);
 	update($tot_dist);
