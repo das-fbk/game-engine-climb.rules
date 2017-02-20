@@ -5,7 +5,7 @@ global Double const_zi_solo_bonus;
 // ****************************************** global functions 	
 function Double getDistanceByMode(String mode) {
 	//constants for mode distances
-	Double const_pandr_distance = 100.0;
+	Double const_pandr_distance = 150.0;
 	Double const_bus_distance = 1800.0;
 	Double const_zeroimpact_distance = 500.0;
 	

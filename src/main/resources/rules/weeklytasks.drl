@@ -8,7 +8,8 @@ import eu.trentorise.game.task.Classification;
 import java.lang.Math;
 import java.util.HashMap;
 
-global Double const_record_percent;
+global Double const_record_percent_class;
+global Double const_record_percent_school;
 global Double const_weekly_nominal_distance;
 global String const_school_name;
 
@@ -31,11 +32,11 @@ function Double findPeriodicMax(PointConcept pc, String pName) {
 rule "R-weekly-record-distance"
 // checks if a team has reached its new WEEKLY record for a given counter
 // In that case, awards a bonus and sends out a MessageNotification
-// Can apply to CLASSES or SCHOOL
+// Can apply to CLASSES only
 when
 	Classification(name == 'team classification weekly', $counter : scoreType, position <=6) //only first 6 (SCHOOL + classes)
 	$pc : PointConcept(name == (String) $counter )
-	Player($teamId : id, team == true) // only works with teams
+	Player($teamId : id, team == true, $teamId != const_school_name) // only works with teams
 	Game( $gameId: id)
 	$id : InputData()
 	$bd : PointConcept(name == "bonus_distance")
@@ -50,7 +51,12 @@ then
 		mn.addData("_record_", current);
 		insert(mn);
 		// assign bonus
-		Double bonus = Math.ceil(current * const_record_percent);
+		Double bonus = 0.0;
+		if ($pc.getName().equals("total_distance")) {
+			bonus = Math.ceil(const_record_percent_class * (current - $bd.getPeriodCurrentScore("weekly")));
+		} else {
+			bonus = Math.ceil(const_record_percent_class * current);
+		}
 		$bd.setScore($bd.getScore() + bonus);
 		$td.setScore($td.getScore() + bonus);
 		$id.getData().put("counter", $counter);
@@ -97,7 +103,7 @@ then
 		 mn.addData("_performance_", current);
 		 insert(mn);
 		 // assign bonus
-		Double bonus = Math.ceil(current * const_record_percent);
+		Double bonus = Math.ceil(current * const_record_percent_school);
 		$bonus_dist.setScore($bonus_dist.getScore() + bonus);
 		$tot_dist.setScore($tot_dist.getScore() + bonus);
 		update($bonus_dist);
