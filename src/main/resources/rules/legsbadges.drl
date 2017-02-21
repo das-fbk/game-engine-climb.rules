@@ -552,9 +552,11 @@ when
 	$tot_dist : PointConcept(name == "total_distance")
 	$bonus_dist : PointConcept(name == "bonus_distance")
 then
-	log("apply \'R-badge-bonus\'");
-	$bonus_dist.setScore($bonus_dist.getScore() + const_leg_bonus);
-	$tot_dist.setScore($tot_dist.getScore() + const_leg_bonus);
-	update($bonus_dist);
-	update($tot_dist);
+	if (const_leg_bonus.intValue() != 0) {
+		log("apply \'R-badge-bonus\'");
+		$bonus_dist.setScore($bonus_dist.getScore() + const_leg_bonus);
+		$tot_dist.setScore($tot_dist.getScore() + const_leg_bonus);
+		update($bonus_dist);
+		update($tot_dist);
+	}
 end

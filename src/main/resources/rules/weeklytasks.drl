@@ -36,7 +36,7 @@ rule "R-weekly-record-distance"
 when
 	Classification(name == 'team classification weekly', $counter : scoreType, position <=6) //only first 6 (SCHOOL + classes)
 	$pc : PointConcept(name == (String) $counter )
-	Player($teamId : id, team == true, $teamId != const_school_name) // only works with teams
+	Player($teamId : id, team == true, $teamId != const_school_name) // only works with classes
 	Game( $gameId: id)
 	$id : InputData()
 	$bd : PointConcept(name == "bonus_distance")

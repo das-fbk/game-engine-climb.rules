@@ -56,19 +56,15 @@ then
 		insert(new UpdateTeams("NoCarDay"));
 	}
 
-	
-			
-		}
-		$id.getData().put("bonusScore", bonus);
-
-	}
 end
 
 rule "Zero Impact Day propagation"
+// includes setting of counter of No-Car classs for the day
 salience -1000
 when
 	Propagation(action == "ZeroImpactDay")
 	Player($teamId : id, team == true) // only works with teams
+	$ncc : PointConcept(name == "no_car_classes")
 	$bonus_dist : PointConcept(name == "bonus_distance")
 	$tot_dist : PointConcept(name == "total_distance")
 then
@@ -77,6 +73,10 @@ then
 	$tot_dist.setScore($tot_dist.getScore() + const_ZeroImpactDayClass_bonus);
 	update($bonus_dist);
 	update($tot_dist);
+	if (((String)$teamId).equals(const_school_name)) {
+		$ncc.setScore($ncc.getScore() +1d);
+		update($ncc);
+	}
 end
 
 rule "No Car Day propagation"
