@@ -41,7 +41,8 @@ then
 			mn.addData("_performance_", currentScore);
 			mn.addData("_target_", (Double)$target);
 			mn.addData("_counter_", "Km");
-			insert(mn);
+			// if you want to issue a progress notification just uncomment following line
+			//insert(mn);
 		}
 	}
 end

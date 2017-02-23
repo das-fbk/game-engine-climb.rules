@@ -1,6 +1,6 @@
 package  eu.trentorise.game.model
 
-import java.util.HashSet;
+import java.util.ArrayList;
 
 import eu.trentorise.game.notification.BadgeNotification;
 import eu.trentorise.game.notification.MessageNotification;
@@ -341,14 +341,14 @@ when
 	$bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Verona') 
     PointConcept(name == 'total_distance', 
     	score > Verona_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < Verona_distance)
-    $cd: CustomData($almost : this["almost_reached_legs"] == null || !((HashSet)$almost).contains("Verona")) 
+    $cd: CustomData($almost : this["almost_reached_legs"] == null || !((ArrayList)$almost).contains("Verona")) 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-notify-almost Verona\'");
-    HashSet hs = (HashSet)$almost;
+    ArrayList hs = (ArrayList)$almost;
     if (hs==null) { 
-    	hs = new HashSet();
+    	hs = new ArrayList();
     	$cd.put("almost_reached_legs", hs);
     }
     hs.add("Verona");
@@ -364,14 +364,14 @@ when
 	$bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Foce del Po') 
     PointConcept(name == 'total_distance', 
     	score > Foce_Del_Po_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < Foce_Del_Po_distance)
-    $cd: CustomData($almost : this["almost_reached_legs"] ==null || !((HashSet)$almost).contains("Foce del Po")) 
+    $cd: CustomData($almost : this["almost_reached_legs"] ==null || !((ArrayList)$almost).contains("Foce del Po")) 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-notify-almost Foce del Po\'");
-    HashSet hs = (HashSet)$almost;
+    ArrayList hs = (ArrayList)$almost;
     if (hs==null) {
-    	hs = new HashSet();
+    	hs = new ArrayList();
     	$cd.put("almost_reached_legs", hs);
     }
     hs.add("Foce del Po");
@@ -387,14 +387,14 @@ when
 	$bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Cascata Marmore') 
     PointConcept(name == 'total_distance', 
     	score > Cascata_Marmore_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < Cascata_Marmore_distance)
-    $cd: CustomData($almost : this["almost_reached_legs"] ==null || !((HashSet)$almost).contains("Cascata Marmore")) 
+    $cd: CustomData($almost : this["almost_reached_legs"] ==null || !((ArrayList)$almost).contains("Cascata Marmore")) 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-notify-almost Cascata Marmore\'");
-    HashSet hs = (HashSet)$almost;
+    ArrayList hs = (ArrayList)$almost;
     if (hs==null) {
-    	hs = new HashSet();
+    	hs = new ArrayList();
     	$cd.put("almost_reached_legs", hs);
     }
     hs.add("Cascata Marmore");
@@ -411,14 +411,14 @@ when
 	$bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Reggio Calabria') 
     PointConcept(name == 'total_distance', 
     	score > Reggio_Calabria_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < Reggio_Calabria_distance)
-    $cd: CustomData($almost : this["almost_reached_legs"] ==null || !((HashSet)$almost).contains("Reggio Calabria")) 
+    $cd: CustomData($almost : this["almost_reached_legs"] ==null || !((ArrayList)$almost).contains("Reggio Calabria")) 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-notify-almost Reggio Calabria\'");
-    HashSet hs = (HashSet)$almost;
+    ArrayList hs = (ArrayList)$almost;
     if (hs==null) {
-    	hs = new HashSet();
+    	hs = new ArrayList();
     	$cd.put("almost_reached_legs", hs);
     }
     hs.add("Reggio Calabria");
@@ -434,14 +434,14 @@ when
 	$bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Al Goled') 
     PointConcept(name == 'total_distance', 
     	score > Al_Goled_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < Al_Goled_distance)
-    $cd: CustomData($almost : this["almost_reached_legs"] ==null || !((HashSet)$almost).contains("Al Goled")) 
+    $cd: CustomData($almost : this["almost_reached_legs"] ==null || !((ArrayList)$almost).contains("Al Goled")) 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-notify-almost Al Goled\'");
-    HashSet hs = (HashSet)$almost;
+    ArrayList hs = (ArrayList)$almost;
     if (hs==null) {
-    	hs = new HashSet();
+    	hs = new ArrayList();
     	$cd.put("almost_reached_legs", hs);
     }
     hs.add("Al Goled");
@@ -457,14 +457,14 @@ when
 	$bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Meroe') 
     PointConcept(name == 'total_distance', 
     	score > Meroe_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < Meroe_distance)
-    $cd: CustomData($almost : this["almost_reached_legs"] ==null || !((HashSet)$almost).contains("Meroe")) 
+    $cd: CustomData($almost : this["almost_reached_legs"] ==null || !((ArrayList)$almost).contains("Meroe")) 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-notify-almost Meroe\'");
-    HashSet hs = (HashSet)$almost;
+    ArrayList hs = (ArrayList)$almost;
     if (hs==null) {
-    	hs = new HashSet();
+    	hs = new ArrayList();
     	$cd.put("almost_reached_legs", hs);
     }
     hs.add("Meroe");
@@ -480,14 +480,14 @@ when
 	$bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Dinder') 
     PointConcept(name == 'total_distance', 
     	score > Dinder_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < Dinder_distance)
-    $cd: CustomData($almost : this["almost_reached_legs"] ==null || !((HashSet)$almost).contains("Dinder")) 
+    $cd: CustomData($almost : this["almost_reached_legs"] ==null || !((ArrayList)$almost).contains("Dinder")) 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-notify-almost Dinder\'");
-    HashSet hs = (HashSet)$almost;
+    ArrayList hs = (ArrayList)$almost;
     if (hs==null) {
-    	hs = new HashSet();
+    	hs = new ArrayList();
     	$cd.put("almost_reached_legs", hs);
     }
     hs.add("Dinder");
@@ -503,14 +503,14 @@ when
 	$bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Boma') 
     PointConcept(name == 'total_distance', 
     	score > Boma_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < Boma_distance)
-    $cd: CustomData($almost : this["almost_reached_legs"] ==null || !((HashSet)$almost).contains("Boma")) 
+    $cd: CustomData($almost : this["almost_reached_legs"] ==null || !((ArrayList)$almost).contains("Boma")) 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-notify-almost Boma\'");
-    HashSet hs = (HashSet)$almost;
+    ArrayList hs = (ArrayList)$almost;
     if (hs==null) {
-    	hs = new HashSet();
+    	hs = new ArrayList();
     	$cd.put("almost_reached_legs", hs);
     }
     hs.add("Boma");
@@ -526,14 +526,14 @@ when
 	$bc : BadgeCollectionConcept(name == 'LegsToKangole', badgeEarned not contains 'Kangole') 
     PointConcept(name == 'total_distance', 
     	score > Kangole_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < Kangole_distance)
-    $cd: CustomData($almost : this["almost_reached_legs"] ==null || !((HashSet)$almost).contains("Kangole")) 
+    $cd: CustomData($almost : this["almost_reached_legs"] ==null || !((ArrayList)$almost).contains("Kangole")) 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
     log("apply \'R-notify-almost Kangole\'");
-    HashSet hs = (HashSet)$almost;
+    ArrayList hs = (ArrayList)$almost;
     if (hs==null) {
-    	hs = new HashSet();
+    	hs = new ArrayList();
     	$cd.put("almost_reached_legs", hs);
     }
     hs.add("Kangole");
