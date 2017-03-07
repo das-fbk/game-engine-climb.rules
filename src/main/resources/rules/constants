@@ -76,5 +76,5 @@ Dinder_distance=6723117.0
 Boma_distance=7530117.0
 Kangole_distance=8062767.0
 
-
+const_day_millis=86400000l
 
