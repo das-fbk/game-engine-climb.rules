@@ -5,6 +5,77 @@ import eu.trentorise.game.model.PointConcept.PeriodInstance;
 
 global Long const_day_millis;
 
+rule 'ch-KmSettimanali-check-open'
+no-loop
+// this is an OPEN challenge for TEAMS --> classes or school
+// if classes, reward must be propagated up to school
+when
+	$challenge : ChallengeConcept( modelName == "KmSettimanali", $counter: fields["counterName"], 
+		$target: fields["target"], $tt : fields["TargetTeam"], $vp : fields["VirtualPrize"],
+		$bonusPointType : fields["bonusPointType"], 
+		$bonusScore : fields["bonusScore"], 
+		isCompleted() != true, 
+		$leg : fields["legName"] != null,
+		$pw : fields["prizeWon"] == false,
+		$startTime : start.getTime() )
+	$id : InputData()
+	$pc1 : PointConcept(name == (String) $counter)
+	Player($teamId : id, team == true) // only works with teams
+	Game( $gameId: id)
+	$pc : PointConcept(name == (String) $bonusPointType)
+	$tot_dist : PointConcept(name == "total_distance")
+then 
+    log("apply \'ch-KmSettimanali-check-open\' with Prize: " + $vp);	
+	Double totScore = 0.0; 
+	PeriodInstance pi = $pc1.getPeriodCurrentInstance("weekly");
+	int i = pi.getIndex();
+	while ((long)$startTime <= pi.getStart() && i > 0) {
+		log ("Index = " + i + " and weekly score = " + pi.getScore());
+		if (pi != null && pi.getScore() > totScore) {
+			totScore = pi.getScore();
+               }
+		pi = $pc1.getPeriodInstance("weekly", --i);
+	}
+	log ("Total Weekly Score in challenge period = " + totScore);	
+	if (totScore >= (Double)$target) { //challenge was won
+		log("Challenge KMSettimanali HAS BEEN WON by " +$tt +": " + $teamId);
+		MessageNotification mn = new MessageNotification($gameId,$teamId,"ChallengeWon");
+		mn.addData("_VirtualPrize_", $vp);
+		insert(mn);
+		$challenge.getFields().put("prizeWon", (Boolean) true);
+		update($challenge);
+	} 
+end
+
+rule 'ch-KmSettimanali-open-award'
+salience -5000
+when
+	$challenge : ChallengeConcept( modelName == "KmSettimanali", isCompleted() != true,
+		$leg : fields["legName"], $vp : fields["VirtualPrize"], $pw : fields["prizeWon"]== true,
+		$bonusPointType : fields["bonusPointType"], $bonusScore : fields["bonusScore"] )
+	Player($teamId : id, team == true)
+    $id : InputData()
+    BadgeCollectionConcept( name == 'LegsToKangole', 
+    	badgeEarned contains (String)$leg || $leg == null )
+	$pc : PointConcept(name == (String) $bonusPointType)
+	$tot_dist : PointConcept(name == "total_distance")
+then
+	log("apply \'ch-KmSettimanali-open-award \' ");
+    $pc.setScore($pc.getScore() +  (Double)$bonusScore);
+	update($pc);
+	if (! ((String)$bonusPointType).equals("total_distance")) {
+		$tot_dist.setScore($tot_dist.getScore() +  (Double)$bonusScore);
+		update($tot_dist);
+	}
+	$challenge.completed();
+    update($challenge);
+	// if this is a CLASS, propagate bonus to SCHOOL
+	$id.getData().put("bonusScore", $bonusScore);
+	$id.getData().put("bonusPointType", $bonusPointType);
+	insert(new UpdateTeams("Ch-KmSettimanali"));
+end
+
+
 rule 'ch-KmSettimanali-check-schoolweek'
 no-loop
 // this is WEEKLY challenge for TEAMS --> classes or school
@@ -15,6 +86,7 @@ when
 		$bonusPointType : fields["bonusPointType"], 
 		$bonusScore : fields["bonusScore"], 
 		isCompleted() != true, 
+        getEnd() != null,
 		$endTime : end.getTime(), $startTime : start.getTime(), $now: System.currentTimeMillis(),
 		$now > $startTime, (Long) $endTime - const_day_millis < $now ) //last day of the challenge
 	$id : InputData()
