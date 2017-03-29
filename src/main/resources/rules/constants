@@ -52,7 +52,7 @@ const_ZeroImpactDayClass_bonus = 10000.0
 const_weekly_nominal_distance=450000.0
 
 # "almost" distance from next leg (in meters, used in notifications)
-const_almost_reached_next_leg=50000.0
+const_almost_reached_next_leg=100000.0
 
 #constants representing distances to legs 
 Verona_distance=93423.0
