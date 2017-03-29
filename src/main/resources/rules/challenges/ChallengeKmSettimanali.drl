@@ -15,7 +15,7 @@ when
 		$bonusPointType : fields["bonusPointType"], 
 		$bonusScore : fields["bonusScore"], 
 		isCompleted() != true, 
-		$leg : fields["legName"] != null,
+		$leg : fields["legName"] != null, // must be specified
 		$pw : fields["prizeWon"] == false,
 		$startTime : start.getTime() )
 	$id : InputData()
@@ -30,13 +30,13 @@ then
 	PeriodInstance pi = $pc1.getPeriodCurrentInstance("weekly");
 	int i = pi.getIndex();
 	while ((long)$startTime <= pi.getStart() && i > 0) {
-		log ("Index = " + i + " and weekly score = " + pi.getScore());
+		// log ("Index = " + i + " and weekly score = " + pi.getScore());
 		if (pi != null && pi.getScore() > totScore) {
 			totScore = pi.getScore();
                }
 		pi = $pc1.getPeriodInstance("weekly", --i);
 	}
-	log ("Total Weekly Score in challenge period = " + totScore);	
+	log ("High weekly Score in challenge period = " + totScore);	
 	if (totScore >= (Double)$target) { //challenge was won
 		log("Challenge KMSettimanali HAS BEEN WON by " +$tt +": " + $teamId);
 		MessageNotification mn = new MessageNotification($gameId,$teamId,"ChallengeWon");
@@ -86,7 +86,7 @@ when
 		$bonusPointType : fields["bonusPointType"], 
 		$bonusScore : fields["bonusScore"], 
 		isCompleted() != true, 
-        getEnd() != null,
+        getEnd() != null, // Challenge must have an end time
 		$endTime : end.getTime(), $startTime : start.getTime(), $now: System.currentTimeMillis(),
 		$now > $startTime, (Long) $endTime - const_day_millis < $now ) //last day of the challenge
 	$id : InputData()
