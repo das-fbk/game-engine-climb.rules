@@ -1,0 +1,36 @@
+package eu.trentorise.game.model
+
+
+rule 'ch-ViaggiGiornalieri-check'
+when
+   $challenge : ChallengeConcept( modelName == "ViaggiGiornalieri", 
+		$target: fields["target"], $vp : fields["VirtualPrize"],
+		$bonusScore : fields["bonusScore"], 
+		$leg : fields["legName"],
+		isCompleted() != true ) 
+	Player($teamId : id, team == true, $teamId == const_school_name) // only applies to SCHOOL
+	BadgeCollectionConcept( name == 'LegsToKangole', 
+    	badgeEarned contains (String)$leg || $leg == null ) // either they have reached a leg or no leg info in challenge 
+	$zSolo : PointConcept(name == "zeroImpact_solo_trips" )
+	$zAdult : PointConcept(name == "zeroImpact_solo_trips" )
+	$pedibus : PointConcept(name == "pedibus_trips" )
+	$tot_dist : PointConcept(name == "total_distance")  
+	Game( $gameId: id) 
+then
+	log("apply \'ch-ViaggiGiornalieri-check\' with Prize: " + $vp);
+	Double todayTrips = $zSolo.getPeriodCurrentScore("daily") 
+		+ $zAdult.getPeriodCurrentScore("daily")
+		+ $pedibus.getPeriodCurrentScore("daily");
+	if (todayTrips >= (Double) $target) {// challenge was won
+		log("Challenge ViaggiGiornalieri HAS BEEN WON by: " + $teamId);
+		// in this challenge we SET the score to $bonusScore - rather than adding it
+		$tot_dist.setScore((Double)$bonusScore);
+		update($tot_dist);
+		MessageNotification mn = new MessageNotification($gameId,$teamId,"ChallengeWon");
+		mn.addData("_VirtualPrize_", $vp);
+		insert(mn);
+		$challenge.completed();
+    	update($challenge);  	
+	}
+end
+
