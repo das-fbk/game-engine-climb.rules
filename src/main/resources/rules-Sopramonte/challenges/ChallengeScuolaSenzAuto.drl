@@ -1,7 +1,9 @@
 package eu.trentorise.game.model
 
 import java.util.ArrayList;
+import eu.trentorise.game.core.Utility;
 
+global Utility utils;
 global String const_school_name;
 
 rule 'ch-ScuolaSenzAuto-class-check'
@@ -16,10 +18,10 @@ when
 		((Double)$today).intValue() == ((Integer)$class_size).intValue() )
 	$ct : PointConcept(name == "car_trips")
 then
-	log("apply \'ch-ScuolaSenzAuto-class-check\'");	
+	utils.log("apply \'ch-ScuolaSenzAuto-class-check\'");	
 	Double carTrips = $ct.getPeriodCurrentScore("daily");
 	if (carTrips == 0d) {
-		log("Challenge ScuolaSenzAuto HAS BEEN WON by CLASS: " + $teamId);
+		utils.log("Challenge ScuolaSenzAuto HAS BEEN WON by CLASS: " + $teamId);
 		MessageNotification mn = new MessageNotification($gameId,$teamId,"ChallengeWon");
 		mn.addData("_VirtualPrize_", $vp);
 		insert(mn);
@@ -39,10 +41,10 @@ when
 		((Double)$today).intValue() == ((Integer)$school_size).intValue() )
 	$ct : PointConcept(name == "car_trips")
 then
-	log("apply \'ch-ScuolaSenzAuto-class-check\' " + $today + " vs. " + $school_size);	
+	utils.log("apply \'ch-ScuolaSenzAuto-class-check\' " + $today + " vs. " + $school_size);	
 	Double carTrips = $ct.getPeriodCurrentScore("daily");
 	if (carTrips == 0d) {
-		log("Challenge ScuolaSenzAuto HAS BEEN WON by SCHOOL: " + $teamId);
+		utils.log("Challenge ScuolaSenzAuto HAS BEEN WON by SCHOOL: " + $teamId);
 		MessageNotification mn = new MessageNotification($gameId,$teamId,"ChallengeWon");
 		mn.addData("_VirtualPrize_", $vp);
 		insert(mn);
@@ -64,7 +66,7 @@ when
 	$pc : PointConcept(name == (String) $bonusPointType)
 	$tot_dist : PointConcept(name == "total_distance")
 then
-	log("apply \'ch-ScuolaSenzAuto-award \' ");
+	utils.log("apply \'ch-ScuolaSenzAuto-award \' ");
     $pc.setScore($pc.getScore() +  (Double)$bonusScore);
 	update($pc);
 	if (! ((String)$bonusPointType).equals("total_distance")) {
@@ -91,7 +93,7 @@ when
 	$tot_dist : PointConcept(name == "total_distance")
 	Player($playerId : id, team == true) 
 then
-	log("apply \'ch-ScuolaSenzAuto-propagation\'");
+	utils.log("apply \'ch-ScuolaSenzAuto-propagation\'");
 	$pc.setScore($pc.getScore() + (Double)$bonusScore);
 	update($pc);
 	if (! ((String)$bonusPointType).equals("total_distance")) {

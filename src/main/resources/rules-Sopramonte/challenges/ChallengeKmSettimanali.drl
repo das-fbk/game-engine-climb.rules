@@ -2,6 +2,9 @@ package eu.trentorise.game.model
 
 import eu.trentorise.game.model.PointConcept;
 import eu.trentorise.game.model.PointConcept.PeriodInstance;
+import eu.trentorise.game.core.Utility;
+
+global Utility utils;
 
 global Long const_day_millis;
 
@@ -25,20 +28,20 @@ when
 	$pc : PointConcept(name == (String) $bonusPointType)
 	$tot_dist : PointConcept(name == "total_distance")
 then 
-    log("apply \'ch-KmSettimanali-check-open\' with Prize: " + $vp);	
+    utils.log("apply \'ch-KmSettimanali-check-open\' with Prize: " + $vp);	
 	Double totScore = 0.0; 
 	PeriodInstance pi = $pc1.getPeriodCurrentInstance("weekly");
 	int i = pi.getIndex();
 	while ((long)$startTime <= pi.getStart() && i > 0) {
-		// log ("Index = " + i + " and weekly score = " + pi.getScore());
+		// utils.log("Index = " + i + " and weekly score = " + pi.getScore());
 		if (pi != null && pi.getScore() > totScore) {
 			totScore = pi.getScore();
                }
 		pi = $pc1.getPeriodInstance("weekly", --i);
 	}
-	log ("High weekly Score in challenge period = " + totScore);	
+	utils.log("High weekly Score in challenge period = " + totScore);	
 	if (totScore >= (Double)$target) { //challenge was won
-		log("Challenge KMSettimanali HAS BEEN WON by " +$tt +": " + $teamId);
+		utils.log("Challenge KMSettimanali HAS BEEN WON by " +$tt +": " + $teamId);
 		MessageNotification mn = new MessageNotification($gameId,$teamId,"ChallengeWon");
 		mn.addData("_VirtualPrize_", $vp);
 		insert(mn);
@@ -60,7 +63,7 @@ when
 	$pc : PointConcept(name == (String) $bonusPointType)
 	$tot_dist : PointConcept(name == "total_distance")
 then
-	log("apply \'ch-KmSettimanali-open-award \' ");
+	utils.log("apply \'ch-KmSettimanali-open-award \' ");
     $pc.setScore($pc.getScore() +  (Double)$bonusScore);
 	update($pc);
 	if (! ((String)$bonusPointType).equals("total_distance")) {
@@ -105,10 +108,10 @@ then
 		if (pi != null) 
 			totScore += pi.getScore();
 	}
-	log("apply \'ch-KmSettimanali-check-schoolweek\'");	
-	log ("Total Score in challenge period = " + totScore);	
+	utils.log("apply \'ch-KmSettimanali-check-schoolweek\'");	
+	utils.log("Total Score in challenge period = " + totScore);	
 	if (totScore >= (Double)$target) { //challenge was won
-		log('Challenge KmSettimanali COMPLETED for ' + (String)$tt + " " + (String)$playerId );
+		utils.log('Challenge KmSettimanali COMPLETED for ' + (String)$tt + " " + (String)$playerId );
 		$pc.setScore($pc.getScore() +  (Double)$bonusScore);
 		update($pc);
 		if (! ((String)$bonusPointType).equals("total_distance")) {
@@ -147,7 +150,7 @@ when
 	$tot_dist : PointConcept(name == "total_distance")
 	Player($playerId : id, team == true) 
 then
-	log("apply \'ch-KmSettimanali-propagation\'");
+	utils.log("apply \'ch-KmSettimanali-propagation\'");
 	$pc.setScore($pc.getScore() + (Double)$bonusScore);
 	update($pc);
 	if (! ((String)$bonusPointType).equals("total_distance")) {
