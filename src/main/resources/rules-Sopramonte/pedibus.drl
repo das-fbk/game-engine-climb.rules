@@ -1,5 +1,8 @@
 package eu.trentorise.game.model
 
+import eu.trentorise.game.core.Utility;
+global Utility utils;
+
 global Double const_pedibus_multiplier;
 
 rule "pedibus update"
@@ -12,7 +15,7 @@ when // here we need to understand better how InputData will be structured
     $pedibus_trips : PointConcept(name == "pedibus_trips")
     Player($playerId: id)
 then
-	log("apply \'pedibus update\' of meters " + $distance); 
+	utils.log("apply \'pedibus update\' of meters " + $distance); 
 	$pedibus_dist.setScore($pedibus_dist.getScore() + (Double)$distance * const_pedibus_multiplier); 
     $tot_dist.setScore($tot_dist.getScore() + (Double)$distance * const_pedibus_multiplier); 
     $pedibus_trips.setScore($pedibus_trips.getScore() + 1d); 
@@ -34,7 +37,7 @@ when
     $tot_trips : PointConcept(name == "total_trips")
     $pedibus_trips : PointConcept(name == "pedibus_trips")
 then
-    log("apply \'pedibus update propagation\' of meters " + (Double)$distance * const_pedibus_multiplier);
+    utils.log("apply \'pedibus update propagation\' of meters " + (Double)$distance * const_pedibus_multiplier);
     $pedibus_dist.setScore($pedibus_dist.getScore() + (Double)$distance * const_pedibus_multiplier); 
     $tot_dist.setScore($tot_dist.getScore() + (Double)$distance * const_pedibus_multiplier); 
     $pedibus_trips.setScore($pedibus_trips.getScore() + 1d); 

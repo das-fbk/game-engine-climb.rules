@@ -8,6 +8,10 @@ import eu.trentorise.game.task.Classification;
 import java.lang.Math;
 import java.util.HashMap;
 
+import eu.trentorise.game.core.Utility;
+
+global Utility utils;
+
 global Double const_record_percent_class;
 global Double const_record_percent_school;
 global Double const_weekly_nominal_distance;
@@ -42,7 +46,7 @@ when
 	$bd : PointConcept(name == "bonus_distance")
 	$td : PointConcept(name == "total_distance")
 then
-	log("apply \'R-check-record-distance\'");
+	utils.log("apply \'R-check-record-distance\'");
 	Double current = $pc.getPeriodCurrentScore("weekly");
 	Double max = findPeriodicMax($pc,"weekly");
 	if (current.equals(max)) {
@@ -75,7 +79,7 @@ when
 	$bd : PointConcept(name == "bonus_distance")
 	$td : PointConcept(name == "total_distance")
 then
-	log("apply \'R-weekly-record-propagation\'");
+	utils.log("apply \'R-weekly-record-propagation\'");
 	$bd.setScore($bd.getScore() + (Double)$bonus);
 	$td.setScore($td.getScore() + (Double)$bonus);
 	update($bd);
@@ -97,7 +101,7 @@ when
 then
 	Double current = $tot_dist.getPeriodCurrentScore("weekly");
 	if (current > const_weekly_nominal_distance) {
-		log("apply \'R-weekly-over-nominal-distance\'");
+		utils.log("apply \'R-weekly-over-nominal-distance\'");
 		MessageNotification mn = new MessageNotification($gameId,$teamId, 'WeeklyPerformanceSchool');
 		 mn.addData("_score_type_", "total_distance");
 		 mn.addData("_performance_", current);

@@ -15,15 +15,6 @@
 # String  (i.e. var=park)
 # java.util.ArrayList (i.e var=park,street,bikestation)
 
-# constants for modal distance (except for pedibus)
-# const_pandr_distance = 150.0
-# const_bus_distance = 1800.0
-# const_zeroimpact_distance = 500.0
-
-# constants for meteo bonuses
-# const_cloudy_bonus = 50.0
-# const_rain_bonus = 100.0
-# const_snow_bonus = 200.0
 
 #for zero impact trips taken autonomously
 const_zi_solo_bonus = 100.0  
@@ -39,7 +30,6 @@ const_record_percent_school=0.05
 const_pedibus_multiplier = 1.5 
 
 #name of the school team/player
-#const_school_name=Scuola Primaria 'San Vigilio' di Vela
 const_school_name=scuola
 
 # bonus for NoCarDayClass
@@ -55,26 +45,10 @@ const_weekly_nominal_distance=450000.0
 const_almost_reached_next_leg=100000.0
 
 #constants representing distances to legs 
-Verona_distance=93423.0
-Foce_Del_Po_distance=233287.0
-San_Marino_distance=379675.0
-Pescia_distance=581538.0
-Volterra_distance=659401.0
-Cascata_Marmore_distance=886741.0
-Roma_distance=980075.0
-Pompei_distance=1222635.0
-Matera_distance=1448889.0
-Bari_distance=1511265.0
-Reggio_Calabria_distance=1983797.0
-Catania_distance=2097317.0
-Atene_distance=3090817.0
-Cairo_distance=4210817.0
-Assuan_distance=5124317.0
-Al_Goled_distance=5874317.0
-Meroe_distance=6252317.0
-Dinder_distance=6723117.0
-Boma_distance=7530117.0
-Kangole_distance=8062767.0
+Roma_distance=1518000.0
+Napoli_distance=1738000.0
+LaMaddalena_distance=3372000.0
+
 
 const_day_millis=86400000l
 

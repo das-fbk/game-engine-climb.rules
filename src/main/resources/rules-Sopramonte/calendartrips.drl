@@ -1,12 +1,14 @@
 package eu.trentorise.game.model
+import eu.trentorise.game.core.Utility;
 
 global Double const_zi_solo_bonus;
+global Utility utils;
 
 // ****************************************** global functions 	
 function Double getDistanceByMode(String mode) {
 	//constants for mode distances
-	Double const_pandr_distance = 150.0;
-	Double const_bus_distance = 1800.0;
+	Double const_pandr_distance = 250.0;
+	Double const_bus_distance = 2000.0;
 	Double const_zeroimpact_distance = 500.0;
 	
 	Double ret = 0.0;
@@ -51,7 +53,7 @@ when
 then
 	// here I make sure to set correctly  the flag for participation in the current day
 	if ($part.getPeriodCurrentScore("daily") == 0) {
-		log("apply participation update");
+		utils.log("apply participation update");
 		$part.setScore($part.getScore() + 1d);
 		update($part);
 		insert(new UpdateTeams("participation"));
@@ -65,7 +67,7 @@ when
     Player($playerId : id, team == true)
     $part : PointConcept(name == "participation_count")
 then
-	log("apply participation update propagation");
+	utils.log("apply participation update propagation");
 	// here I make sure I update the participation count for the team in the current day
 	$part.setScore($part.getScore() + 1d);
 	update($part);
@@ -78,7 +80,7 @@ when
     InputData( $mode : data["mode"] != null, $mode == "absent", $date : data["school-date"] != null)
     $absence : PointConcept(name == "absence_count")
 then
-	log("apply absence update");
+	utils.log("apply absence update");
 	$absence.setScore($absence.getScore() + 1d);
 	update($absence)
     insert(new UpdateTeams());
@@ -90,7 +92,7 @@ when
     Player($playerId : id, team == true)
     $absence : PointConcept(name == "absence_count")
 then
-	log("apply absence update propagation");
+	utils.log("apply absence update propagation");
 	$absence.setScore($absence.getScore() + 1d);
 	update($absence)
     insert(new UpdateTeams());
@@ -114,16 +116,16 @@ then
 	if (myMode.startsWith("zeroImpact") || myMode.equals("pedibus")) {
 		meteoBonus = getMeteoBonus(myMeteo);
 		if (meteoBonus > 0.0) {
-			log("apply meteo Bonus for " + myMeteo + " weather");
+			utils.log("apply meteo Bonus for " + myMeteo + " weather");
 		}
 		if (myMode.equals("zeroImpact_solo")) {
-			log("apply children independent mobiliy Bonus");
+			utils.log("apply children independent mobility Bonus");
 			meteoBonus += const_zi_solo_bonus;
 		}
 		$bonus_dist.setScore($bonus_dist.getScore() + meteoBonus);
 	}
 	if (! myMode.equals("pedibus")) {
-		log("apply " + myMode + " update");		
+		utils.log("apply " + myMode + " update");		
 		distance = getDistanceByMode(myMode);
 		$mode_dist.setScore($mode_dist.getScore() + distance);
 		$mode_trips.setScore($mode_trips.getScore() + 1d); 
@@ -153,7 +155,7 @@ when
     $mode_trips : PointConcept(name == (String)$mode + "_trips")
     $bonus_dist : PointConcept(name == "bonus_distance")
 then
-    log("apply trip mode update propagation");
+    utils.log("apply trip mode update propagation");
 	String myMode = (String)$mode;
 	String myMeteo = (String)$meteo;
 	Double meteoBonus = 0.0;

@@ -1,7 +1,9 @@
 package eu.trentorise.game.model
 
 import eu.trentorise.game.notification.MessageNotification;
+import eu.trentorise.game.core.Utility;
 
+global Utility utils;
 global String const_school_name;
 global Double const_NoCarDayClass_bonus;
 global Double const_ZeroImpactDayClass_bonus;
@@ -33,7 +35,7 @@ then
 			+ $pt.getPeriodCurrentScore("daily");
 		int present = ((Integer)$class_size).intValue() - $absent.getPeriodCurrentScore("daily").intValue();
 		if (validTrips == present) { // it is a ZERO IMPACT day for this class
-			log("apply \' Zero Impact Day Notification \' to class: " + (String)$teamId);
+			utils.log("apply \' Zero Impact Day Notification \' to class: " + (String)$teamId);
 			message = new MessageNotification($gameId, $teamId, "ZeroImpactDayClass");	
 			$bonus_dist.setScore($bonus_dist.getScore() + const_ZeroImpactDayClass_bonus);
 			$tot_dist.setScore($tot_dist.getScore() + const_ZeroImpactDayClass_bonus);
@@ -45,7 +47,7 @@ then
 			insert(new UpdateTeams("ZeroImpactDay"));
 		} 
 		else { //it is only a NO CAR day for this class
-			log("apply \'No Car Day Notification \' to class: " + (String)$teamId);
+			utils.log("apply \'No Car Day Notification \' to class: " + (String)$teamId);
 			message = new MessageNotification($gameId, $teamId, "NoCarDayClass");
 			$bonus_dist.setScore($bonus_dist.getScore() +  const_NoCarDayClass_bonus);
 			$tot_dist.setScore($tot_dist.getScore() +  const_NoCarDayClass_bonus);
@@ -70,7 +72,7 @@ when
 	$bonus_dist : PointConcept(name == "bonus_distance")
 	$tot_dist : PointConcept(name == "total_distance")
 then
-	log("apply \' Zero Impact Day propagation \' ");
+	utils.log("apply \' Zero Impact Day propagation \' ");
 	$bonus_dist.setScore($bonus_dist.getScore() + (Double)$bonusScore);
 	$tot_dist.setScore($tot_dist.getScore() + (Double)$bonusScore);
 	update($bonus_dist);
@@ -92,7 +94,7 @@ when
 	$bonus_dist : PointConcept(name == "bonus_distance")
 	$tot_dist : PointConcept(name == "total_distance")
 then
-	log("apply \' No Car Day propagation \' ");
+	utils.log("apply \' No Car Day propagation \' ");
 	$bonus_dist.setScore($bonus_dist.getScore() + (Double)$bonusScore);
 	$tot_dist.setScore($tot_dist.getScore() + (Double)$bonusScore);
 	update($bonus_dist);
