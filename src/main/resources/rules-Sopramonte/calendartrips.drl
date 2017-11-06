@@ -7,9 +7,9 @@ global Utility utils;
 // ****************************************** global functions 	
 function Double getDistanceByMode(String mode) {
 	//constants for mode distances
-	Double const_pandr_distance = 250.0;
-	Double const_bus_distance = 2000.0;
-	Double const_zeroimpact_distance = 500.0;
+	Double const_pandr_distance = 150.0;
+	Double const_bus_distance = 2500.0;
+	Double const_zeroimpact_distance = 400.0;
 	
 	Double ret = 0.0;
 	
@@ -27,9 +27,9 @@ function Double getDistanceByMode(String mode) {
 
 function Double getMeteoBonus(String meteo) {
 	//constants for meteo bonuses
-	Double const_cloudy_bonus = 100.0;
-	Double const_rain_bonus = 200.0;
-	Double const_snow_bonus = 400.0;
+	Double const_cloudy_bonus = 50.0;
+	Double const_rain_bonus = 150.0;
+	Double const_snow_bonus = 250.0;
 	
 	Double ret = 0.0;
 	
