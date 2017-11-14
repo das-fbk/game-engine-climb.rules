@@ -77,7 +77,7 @@ rule "R-add-badge TreCime"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= TreCime_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Parco Naturale Tre Cime') 
+    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'c') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -595,13 +595,13 @@ rule "R-add-badge Monaco"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Monaco_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Monaco di Baviera') 
+    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Monaco - Salisburgo') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
-    utils.log("apply \'R-add-badge Monaco di Baviera\'");
-    $bc.getBadgeEarned().add('Monaco di Baviera');
-    insert(new BadgeNotification($gameId,$teamId, $bc.getName(), 'Monaco di Baviera'));
+    utils.log("apply \'R-add-badge Monaco - Salisburgo\'");
+    $bc.getBadgeEarned().add('Monaco - Salisburgo');
+    insert(new BadgeNotification($gameId,$teamId, $bc.getName(), 'Monaco - Salisburgo'));
     update( $bc );
 end
 
