@@ -9,9 +9,13 @@ import eu.trentorise.game.core.Utility;
 
 global Utility utils;
 
+global String badge_collection_name;
 global String const_school_name;
 global Double const_leg_bonus;
 global Double const_almost_reached_next_leg;
+
+
+
 // TRIP LEGS
 global Double Bolzano_distance; 
 global Double TreCime_distance;
@@ -64,7 +68,7 @@ rule "R-add-badge Bolzano"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Bolzano_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Bolzano') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Bolzano') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -78,7 +82,7 @@ rule "R-add-badge TreCime"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= TreCime_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Parco Naturale Tre Cime') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Parco Naturale Tre Cime') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -92,7 +96,7 @@ rule "R-add-badge Vajont"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Vajont_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Diga del Vajont') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Diga del Vajont') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -106,7 +110,7 @@ rule "R-add-badge Trieste"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Trieste_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Trieste') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Trieste') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -120,7 +124,7 @@ rule "R-add-badge Venezia"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Venezia_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Venezia') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Venezia') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -134,7 +138,7 @@ rule "R-add-badge DeltaPo"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= DeltaPo_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Delta del Po') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Delta del Po') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -148,7 +152,7 @@ rule "R-add-badge Ravenna"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Ravenna_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Ravenna') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Ravenna') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -162,7 +166,7 @@ rule "R-add-badge Pescia"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Pescia_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Pescia') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Pescia') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -176,7 +180,7 @@ rule "R-add-badge Saturnia"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Saturnia_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Saturnia') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Saturnia') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -190,7 +194,7 @@ rule "R-add-badge Assisi"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Assisi_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Assisi-Fabriano-Recanati') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Assisi-Fabriano-Recanati') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -204,7 +208,7 @@ rule "R-add-badge Amatrice"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Amatrice_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Amatrice - Parco del Gran Sasso') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Amatrice - Parco del Gran Sasso') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -218,7 +222,7 @@ rule "R-add-badge Marmore"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Marmore_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Cascate delle Marmore') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Cascate delle Marmore') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -232,7 +236,7 @@ rule "R-add-badge Roma"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Roma_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Roma') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Roma') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -246,7 +250,7 @@ rule "R-add-badge Napoli"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Napoli_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Napoli - Pompei') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Napoli - Pompei') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -260,7 +264,7 @@ rule "R-add-badge Messina"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Messina_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Messina') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Messina') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -274,7 +278,7 @@ rule "R-add-badge Etna"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Etna_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Etna - Siracusa') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Etna - Siracusa') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -288,7 +292,7 @@ rule "R-add-badge Agrigento"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Agrigento_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Agrigento') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Agrigento') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -302,7 +306,7 @@ rule "R-add-badge Trapani"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Trapani_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Trapani') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Trapani') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -316,7 +320,7 @@ rule "R-add-badge Cagliari"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Cagliari_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Cagliari') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Cagliari') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -330,7 +334,7 @@ rule "R-add-badge La Maddalena"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Maddalena_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'La Maddalena') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'La Maddalena') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -344,7 +348,7 @@ rule "R-add-badge Marsiglia"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Marsiglia_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Marsiglia') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Marsiglia') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -358,7 +362,7 @@ rule "R-add-badge Limoges"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Limoges_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Limoges') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Limoges') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -372,7 +376,7 @@ rule "R-add-badge MontSaintMichel"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= MontSaintMichel_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Le Mont Saint Michel - Saint Malo') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Le Mont Saint Michel - Saint Malo') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -386,7 +390,7 @@ rule "R-add-badge Parigi"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Parigi_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Parigi') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Parigi') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -400,7 +404,7 @@ rule "R-add-badge Londra"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Londra_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Londra') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Londra') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -414,7 +418,7 @@ rule "R-add-badge York"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= York_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'York') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'York') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -428,7 +432,7 @@ rule "R-add-badge Dublino"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Dublino_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Dublino') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Dublino') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -442,7 +446,7 @@ rule "R-add-badge Edimburgo"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Edimburgo_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Edimburgo') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Edimburgo') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -456,7 +460,7 @@ rule "R-add-badge Faroe"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Faroe_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Isole Faroe') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Isole Faroe') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -470,7 +474,7 @@ rule "R-add-badge Islanda"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Islanda_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Islanda') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Islanda') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -484,7 +488,7 @@ rule "R-add-badge Fronningen"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Fronningen_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Fronningen - Fiordi Norvegesi') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Fronningen - Fiordi Norvegesi') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -498,7 +502,7 @@ rule "R-add-badge Rovaniemi"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Rovaniemi_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Rovaniemi') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Rovaniemi') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -512,7 +516,7 @@ rule "R-add-badge Helsinki"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Helsinki_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Helsinki') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Helsinki') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -526,7 +530,7 @@ rule "R-add-badge Stoccolma"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Stoccolma_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Stoccolma') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Stoccolma') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -540,7 +544,7 @@ rule "R-add-badge Copenhagen"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Copenhagen_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Copenhagen - Malmo') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Copenhagen - Malmo') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -554,7 +558,7 @@ rule "R-add-badge Amburgo"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Amburgo_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Amburgo') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Amburgo') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -568,7 +572,7 @@ rule "R-add-badge Brema"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Brema_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Brema') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Brema') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -582,7 +586,7 @@ rule "R-add-badge Berlino"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Berlino_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Berlino') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Berlino') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -596,7 +600,7 @@ rule "R-add-badge Praga"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Praga_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Praga') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Praga') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -610,7 +614,7 @@ rule "R-add-badge Monaco"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Monaco_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Monaco - Salisburgo') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Monaco - Salisburgo') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -624,7 +628,7 @@ rule "R-add-badge Vienna"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Vienna_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Vienna') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Vienna') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -638,7 +642,7 @@ rule "R-add-badge Varsavia"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Varsavia_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Varsavia') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Varsavia') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -652,7 +656,7 @@ rule "R-add-badge Minsk"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= Minsk_distance)
-    $bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Minsk') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Minsk') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
@@ -667,7 +671,7 @@ rule "R-GAME-END"
 // minimal salience to guarantee the MessageNotification is the last seen
 salience -10000
 when
-	BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned contains 'Minsk')
+	BadgeCollectionConcept(name == badge_collection_name, badgeEarned contains 'Minsk')
 	Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
     $cd : CustomData()
@@ -689,7 +693,7 @@ end
 rule "R-notify-almost Messina"
 	salience -2000
 when 
-	$bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Messina') 
+	$bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Messina') 
     PointConcept(name == 'total_distance', 
     	score > Messina_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < Messina_distance)
     $cd: CustomData($almost : this["almost_reached_legs"] == null || !((ArrayList)$almost).contains("Messina")) 
@@ -713,7 +717,7 @@ end
 rule "R-notify-almost Limoges"
 	salience -2000
 when 
-	$bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Limoges') 
+	$bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Limoges') 
     PointConcept(name == 'total_distance', 
     	score > Limoges_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < Limoges_distance)
     $cd: CustomData($almost : this["almost_reached_legs"] == null || !((ArrayList)$almost).contains("Limoges")) 
@@ -736,7 +740,7 @@ end
 rule "R-notify-almost Islanda"
 	salience -2000
 when 
-	$bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Islanda') 
+	$bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Islanda') 
     PointConcept(name == 'total_distance', 
     	score > Islanda_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < Islanda_distance)
     $cd: CustomData($almost : this["almost_reached_legs"] == null || !((ArrayList)$almost).contains("Islanda")) 
@@ -759,7 +763,7 @@ end
 rule "R-notify-almost Fronningen"
 	salience -2000
 when 
-	$bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Fronningen - Fiordi Norvegesi') 
+	$bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Fronningen - Fiordi Norvegesi') 
     PointConcept(name == 'total_distance', 
     	score > Fronningen_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < Fronningen_distance)
     $cd: CustomData($almost : this["almost_reached_legs"] == null || !((ArrayList)$almost).contains("Fronningen - Fiordi Norvegesi")) 
@@ -782,7 +786,7 @@ end
 rule "R-notify-almost Helsinki"
 	salience -2000
 when 
-	$bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Helsinki') 
+	$bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Helsinki') 
     PointConcept(name == 'total_distance', 
     	score > Helsinki_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < Helsinki_distance)
     $cd: CustomData($almost : this["almost_reached_legs"] == null || !((ArrayList)$almost).contains("Helsinki")) 
@@ -805,7 +809,7 @@ end
 rule "R-notify-almost Copenhagen - Malmo"
 	salience -2000
 when 
-	$bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Copenhagen - Malmo') 
+	$bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Copenhagen - Malmo') 
     PointConcept(name == 'total_distance', 
     	score > Copenhagen_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < Copenhagen_distance)
     $cd: CustomData($almost : this["almost_reached_legs"] == null || !((ArrayList)$almost).contains("Copenhagen - Malmo")) 
@@ -828,7 +832,7 @@ end
 rule "R-notify-almost Varsavia"
 	salience -2000
 when 
-	$bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Varsavia') 
+	$bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Varsavia') 
     PointConcept(name == 'total_distance', 
     	score > Varsavia_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < Varsavia_distance)
     $cd: CustomData($almost : this["almost_reached_legs"] == null || !((ArrayList)$almost).contains("Varsavia")) 
@@ -851,7 +855,7 @@ end
 rule "R-notify-almost Minsk"
 	salience -2000
 when 
-	$bc : BadgeCollectionConcept(name == 'LegsToMinsk', badgeEarned not contains 'Minsk') 
+	$bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Minsk') 
     PointConcept(name == 'total_distance', 
     	score > Minsk_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < Minsk_distance)
     $cd: CustomData($almost : this["almost_reached_legs"] == null || !((ArrayList)$almost).contains("Minsk")) 
@@ -875,7 +879,7 @@ end
 /*rule "R-badge-bonus"
 salience -10000
 when
-	BadgeNotification( collectionName == 'LegsToMinsk', playerId == const_school_name )
+	BadgeNotification( collectionName == badge_collection_name, playerId == const_school_name )
 	$tot_dist : PointConcept(name == "total_distance")
 	$bonus_dist : PointConcept(name == "bonus_distance")
 then

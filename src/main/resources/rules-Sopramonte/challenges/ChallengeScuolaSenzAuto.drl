@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import eu.trentorise.game.core.Utility;
 
 global Utility utils;
-global String const_school_name;
 global String badge_collection_name;
+global String const_school_name;
 
 rule 'ch-ScuolaSenzAuto-class-check'
 salience -1000
@@ -62,7 +62,7 @@ when
 		$bonusPointType : fields["bonusPointType"], $bonusScore : fields["bonusScore"] )
 	Player($teamId : id, team == true)
     $id : InputData()
-    BadgeCollectionConcept( name == 'LegsToMinsk', 
+    BadgeCollectionConcept( name == badge_collection_name, 
     	badgeEarned contains (String)$leg || $leg == null )
 	$pc : PointConcept(name == (String) $bonusPointType)
 	$tot_dist : PointConcept(name == "total_distance")
