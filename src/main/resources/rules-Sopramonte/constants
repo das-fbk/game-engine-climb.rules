@@ -51,6 +51,9 @@ const_almost_reached_next_leg=150000.0
 # name of the badge collection for journey stops
 badge_collection_name=LegsToMinsk
 
+#name of the destination
+final_destination=MINSK
+
 #constants representing distances to legs 
 Bolzano_distance=60000.0
 TreCime_distance=170000.0

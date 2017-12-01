@@ -11,6 +11,7 @@ global Utility utils;
 
 global String badge_collection_name;
 global String const_school_name;
+global String final_destination;
 global Double const_leg_bonus;
 global Double const_almost_reached_next_leg;
 
@@ -681,6 +682,7 @@ then
 	$cd.put("game_finished", new Boolean(true));
 	MessageNotification message = new MessageNotification($gameId,$teamId, 'GameFinished');
     message.addData("_totalKm_", $tot_dist.getScore());
+    message.addData("_finalDestination_", final_destination);
     insert(message);
 	
 end
