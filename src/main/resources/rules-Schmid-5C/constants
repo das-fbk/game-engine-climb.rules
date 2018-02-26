@@ -33,7 +33,7 @@ const_pedibus_multiplier = 1.5
 const_school_name=Scuola Schmid 5C
 
 #total number of teams (SCHOOL + classes), used in weeklytasks
-const_number_of_teams=3
+const_number_of_teams=2
 
 
 # bonus for NoCarDayClass
