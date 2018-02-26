@@ -1,0 +1,71 @@
+# insert your constants to use in game rules
+# 
+# SAMPLE USAGE 
+# 
+# constants file
+# var_name = var_value
+# 
+#
+# usage in rule
+# global VALUE_TYPE var_name;
+#
+# supported VALUE_TYPE
+# Integer (i.e. var=1)
+# Double  (i.e. var=2.3)
+# String  (i.e. var=park)
+# java.util.ArrayList (i.e var=park,street,bikestation)
+
+
+#for zero impact trips taken autonomously
+const_zi_solo_bonus = 200.0  
+
+#bonus for reaching leg (school)
+const_leg_bonus=0.0
+
+#bonus for beating weekly record (as percent)
+const_record_percent_class=0.20
+const_record_percent_school=0.20
+
+#multiplier for pedibus trips
+const_pedibus_multiplier = 1.5 
+
+#name of the school team/player
+const_school_name=Scuola Schmid 4B 4C
+
+#total number of teams (SCHOOL + classes), used in weeklytasks
+const_number_of_teams=3
+
+
+# bonus for NoCarDayClass
+const_NoCarDayClass_bonus = 5000.0
+
+# bonus for ZeroImpactDayClass
+const_ZeroImpactDayClass_bonus = 10000.0
+
+# nominal weekly distance estimated for whole school
+const_weekly_nominal_distance=100000.0
+
+# "almost" distance from next leg (in meters, used in notifications)
+const_almost_reached_next_leg=150000.0
+
+# name of the badge collection for journey stops
+badge_collection_name=LegsToRome
+
+#name of the destination
+final_destination=ROMA
+
+#constants representing distances to legs 
+Resia_distance=154000.0
+LagoDiComo_distance=348000.0
+Torino_distance=544000.0
+OasiSantAlessio_distance=684000.0
+Trieste_distance=1097000.0
+Venezia_distance=1249000.0
+DeltaDelPo_distance=1319000.0
+CostaAdriatica_distance=1422000.0
+Firenze_distance=1556000.0
+GranSasso_distance=1898000.0
+Roma_distance=244000.0
+
+const_day_millis=86400000l
+
