@@ -43,7 +43,7 @@ const_NoCarDayClass_bonus = 5000.0
 const_ZeroImpactDayClass_bonus = 10000.0
 
 # nominal weekly distance estimated for whole school
-const_weekly_nominal_distance=100000.0
+const_weekly_nominal_distance=25000.0
 
 # "almost" distance from next leg (in meters, used in notifications)
 const_almost_reached_next_leg=150000.0
