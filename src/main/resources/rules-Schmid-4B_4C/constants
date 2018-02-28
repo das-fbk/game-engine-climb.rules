@@ -65,7 +65,7 @@ DeltaDelPo_distance=1319000.0
 CostaAdriatica_distance=1422000.0
 Firenze_distance=1556000.0
 GranSasso_distance=1898000.0
-Roma_distance=244000.0
+Roma_distance=2044000.0
 
 const_day_millis=86400000l
 

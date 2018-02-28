@@ -93,17 +93,17 @@ then
     update( $bc );
 end
 
-rule "R-add-badge Grotte di Frassassi"
+rule "R-add-badge Grotte di Frasassi"
 	salience -1000
 when 
     PointConcept(name == 'total_distance', score >= GrotteDiFrasassi_distance)
-    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Grotte di Frassassi') 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Grotte di Frasassi') 
     Game( $gameId: id)
     Player( $teamId : id, $teamId == const_school_name, team == true )
 then
-    utils.log("apply \'R-add-badge Grotte di Frassassi\'");
-    $bc.getBadgeEarned().add('Grotte di Frassassi');
-    insert(new BadgeNotification($gameId,$teamId, $bc.getName(), 'Grotte di Frassassi'));
+    utils.log("apply \'R-add-badge Grotte di Frasassi\'");
+    $bc.getBadgeEarned().add('Grotte di Frasassi');
+    insert(new BadgeNotification($gameId,$teamId, $bc.getName(), 'Grotte di Frasassi'));
     update( $bc );
 end
 
