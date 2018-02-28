@@ -49,7 +49,7 @@ const_weekly_nominal_distance=100000.0
 const_almost_reached_next_leg=150000.0
 
 # name of the badge collection for journey stops
-badge_collection_name=LegsToRome
+badge_collection_name=LegsCollection
 
 #name of the destination
 final_destination=ROMA
