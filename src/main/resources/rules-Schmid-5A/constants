@@ -52,7 +52,7 @@ const_almost_reached_next_leg=150000.0
 badge_collection_name=LegsCollection
 
 #name of the destination
-final_destination=SARNANO
+final_destination=GALLIPOLI
 
 #constants representing distances to legs 
 #constants representing distances to legs 
