@@ -1,0 +1,278 @@
+package  eu.trentorise.game.model
+
+import java.util.ArrayList;
+
+import eu.trentorise.game.notification.BadgeNotification;
+import eu.trentorise.game.notification.MessageNotification;
+
+import eu.trentorise.game.core.Utility;
+
+global Utility utils;
+
+global String badge_collection_name;
+global String const_school_name;
+global String final_destination;
+global Double const_leg_bonus;
+global Double const_almost_reached_next_leg;
+
+
+// TRIP LEGS
+global Double Cadine_distance;
+global Double Londra_distance;
+global Double Brema_distance;
+global Double Odense_distance;
+global Double Rovaniemi_distance;
+global Double SanPietroburgo_distance;
+global Double Mosca_distance;
+global Double Varsavia_distance;
+global Double Vienna_distance;
+global Double Bolzano_distance;
+global Double Pisa_distance;
+global Double Roma_distance;
+global Double Bari_distance;
+global Double ReggioCalabria_distance;
+global Double Siracusa_distance;
+
+//add leg badge rules
+//only for SCHOOL
+
+
+rule "R-add-badge Londra"
+	salience -1000
+when 
+	PointConcept(name == 'total_distance', score >= Londra_distance)
+	$bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Londra') 
+	Game($gameId: id)
+	Player( $teamId : id, $teamId == const_school_name, team == true )
+then
+	utils.log("apply 'R-add-badge Londra'");
+	$bc.getBadgeEarned().add('Londra');
+	insert(new BadgeNotification($gameId, $teamId, $bc.getName(), 'Londra'));
+	update( $bc );
+end
+
+rule "R-add-badge Brema"
+	salience -1000
+when 
+	PointConcept(name == 'total_distance', score >= Brema_distance)
+	$bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Brema') 
+	Game($gameId: id)
+	Player( $teamId : id, $teamId == const_school_name, team == true )
+then
+	utils.log("apply 'R-add-badge Brema'");
+	$bc.getBadgeEarned().add('Brema');
+	insert(new BadgeNotification($gameId, $teamId, $bc.getName(), 'Brema'));
+	update( $bc );
+end
+
+rule "R-add-badge Odense"
+	salience -1000
+when 
+	PointConcept(name == 'total_distance', score >= Odense_distance)
+	$bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Odense') 
+	Game($gameId: id)
+	Player( $teamId : id, $teamId == const_school_name, team == true )
+then
+	utils.log("apply 'R-add-badge Odense'");
+	$bc.getBadgeEarned().add('Odense');
+	insert(new BadgeNotification($gameId, $teamId, $bc.getName(), 'Odense'));
+	update( $bc );
+end
+
+rule "R-add-badge Rovaniemi"
+	salience -1000
+when 
+	PointConcept(name == 'total_distance', score >= Rovaniemi_distance)
+	$bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Rovaniemi') 
+	Game($gameId: id)
+	Player( $teamId : id, $teamId == const_school_name, team == true )
+then
+	utils.log("apply 'R-add-badge Rovaniemi'");
+	$bc.getBadgeEarned().add('Rovaniemi');
+	insert(new BadgeNotification($gameId, $teamId, $bc.getName(), 'Rovaniemi'));
+	update( $bc );
+end
+
+rule "R-notify-almost Rovaniemi"
+    salience -2000
+when 
+    $bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Rovaniemi') 
+    PointConcept(name == 'total_distance', 
+        score > Rovaniemi_distance - const_almost_reached_next_leg && const_almost_reached_next_leg < Rovaniemi_distance)
+    $cd: CustomData($almost : this["almost_reached_legs"] == null || !((ArrayList)$almost).contains("Rovaniemi")) 
+    Game( $gameId: id)
+    Player( $teamId : id, $teamId == const_school_name, team == true )
+then
+    utils.log("apply \'R-notify-almost Rovaniemi\'");
+    ArrayList hs = (ArrayList)$almost;
+    if (hs==null) { 
+        hs = new ArrayList();
+        $cd.put("almost_reached_legs", hs);
+    }
+    hs.add("Rovaniemi");
+    
+    MessageNotification message = new MessageNotification($gameId,$teamId, 'AlmostReachedLeg');
+    message.addData("_leg_", "Rovaniemi");
+    insert(message);
+end
+
+rule "R-add-badge San Pietroburgo"
+	salience -1000
+when 
+	PointConcept(name == 'total_distance', score >= SanPietroburgo_distance)
+	$bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'San Pietroburgo') 
+	Game($gameId: id)
+	Player( $teamId : id, $teamId == const_school_name, team == true )
+then
+	utils.log("apply 'R-add-badge San Pietroburgo'");
+	$bc.getBadgeEarned().add('San Pietroburgo');
+	insert(new BadgeNotification($gameId, $teamId, $bc.getName(), 'San Pietroburgo'));
+	update( $bc );
+end
+
+rule "R-add-badge Mosca"
+	salience -1000
+when 
+	PointConcept(name == 'total_distance', score >= Mosca_distance)
+	$bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Mosca') 
+	Game($gameId: id)
+	Player( $teamId : id, $teamId == const_school_name, team == true )
+then
+	utils.log("apply 'R-add-badge Mosca'");
+	$bc.getBadgeEarned().add('Mosca');
+	insert(new BadgeNotification($gameId, $teamId, $bc.getName(), 'Mosca'));
+	update( $bc );
+end
+
+rule "R-add-badge Varsavia"
+	salience -1000
+when 
+	PointConcept(name == 'total_distance', score >= Varsavia_distance)
+	$bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Varsavia') 
+	Game($gameId: id)
+	Player( $teamId : id, $teamId == const_school_name, team == true )
+then
+	utils.log("apply 'R-add-badge Varsavia'");
+	$bc.getBadgeEarned().add('Varsavia');
+	insert(new BadgeNotification($gameId, $teamId, $bc.getName(), 'Varsavia'));
+	update( $bc );
+end
+
+rule "R-add-badge Vienna"
+	salience -1000
+when 
+	PointConcept(name == 'total_distance', score >= Vienna_distance)
+	$bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Vienna') 
+	Game($gameId: id)
+	Player( $teamId : id, $teamId == const_school_name, team == true )
+then
+	utils.log("apply 'R-add-badge Vienna'");
+	$bc.getBadgeEarned().add('Vienna');
+	insert(new BadgeNotification($gameId, $teamId, $bc.getName(), 'Vienna'));
+	update( $bc );
+end
+
+rule "R-add-badge Bolzano"
+	salience -1000
+when 
+	PointConcept(name == 'total_distance', score >= Bolzano_distance)
+	$bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Bolzano') 
+	Game($gameId: id)
+	Player( $teamId : id, $teamId == const_school_name, team == true )
+then
+	utils.log("apply 'R-add-badge Bolzano'");
+	$bc.getBadgeEarned().add('Bolzano');
+	insert(new BadgeNotification($gameId, $teamId, $bc.getName(), 'Bolzano'));
+	update( $bc );
+end
+
+rule "R-add-badge Pisa"
+	salience -1000
+when 
+	PointConcept(name == 'total_distance', score >= Pisa_distance)
+	$bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Pisa') 
+	Game($gameId: id)
+	Player( $teamId : id, $teamId == const_school_name, team == true )
+then
+	utils.log("apply 'R-add-badge Pisa'");
+	$bc.getBadgeEarned().add('Pisa');
+	insert(new BadgeNotification($gameId, $teamId, $bc.getName(), 'Pisa'));
+	update( $bc );
+end
+
+rule "R-add-badge Roma"
+	salience -1000
+when 
+	PointConcept(name == 'total_distance', score >= Roma_distance)
+	$bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Roma') 
+	Game($gameId: id)
+	Player( $teamId : id, $teamId == const_school_name, team == true )
+then
+	utils.log("apply 'R-add-badge Roma'");
+	$bc.getBadgeEarned().add('Roma');
+	insert(new BadgeNotification($gameId, $teamId, $bc.getName(), 'Roma'));
+	update( $bc );
+end
+
+rule "R-add-badge Bari"
+	salience -1000
+when 
+	PointConcept(name == 'total_distance', score >= Bari_distance)
+	$bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Bari') 
+	Game($gameId: id)
+	Player( $teamId : id, $teamId == const_school_name, team == true )
+then
+	utils.log("apply 'R-add-badge Bari'");
+	$bc.getBadgeEarned().add('Bari');
+	insert(new BadgeNotification($gameId, $teamId, $bc.getName(), 'Bari'));
+	update( $bc );
+end
+
+rule "R-add-badge Reggio Calabria"
+	salience -1000
+when 
+	PointConcept(name == 'total_distance', score >= ReggioCalabria_distance)
+	$bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Reggio Calabria') 
+	Game($gameId: id)
+	Player( $teamId : id, $teamId == const_school_name, team == true )
+then
+	utils.log("apply 'R-add-badge Reggio Calabria'");
+	$bc.getBadgeEarned().add('Reggio Calabria');
+	insert(new BadgeNotification($gameId, $teamId, $bc.getName(), 'Reggio Calabria'));
+	update( $bc );
+end
+
+rule "R-add-badge Siracusa"
+	salience -1000
+when 
+	PointConcept(name == 'total_distance', score >= Siracusa_distance)
+	$bc : BadgeCollectionConcept(name == badge_collection_name, badgeEarned not contains 'Siracusa') 
+	Game($gameId: id)
+	Player( $teamId : id, $teamId == const_school_name, team == true )
+then
+	utils.log("apply 'R-add-badge Siracusa'");
+	$bc.getBadgeEarned().add('Siracusa');
+	insert(new BadgeNotification($gameId, $teamId, $bc.getName(), 'Siracusa'));
+	update( $bc );
+end
+
+
+rule "R-GAME-END"
+//special END-OF-GAME MessageNotification for SCHOOL
+// minimal salience to guarantee the MessageNotification is the last seen
+salience -10000
+when
+	BadgeCollectionConcept(name == badge_collection_name, badgeEarned contains 'Siracusa')
+
+	Game($gameId: id)
+	Player( $teamId : id, $teamId == const_school_name, team == true )
+	$cd : CustomData()
+	$tot_dist : PointConcept(name == 'total_distance')
+then
+	utils.log("apply 'R-GAME-END'");
+	$cd.put("game_finished", new Boolean(true));
+	MessageNotification message = new MessageNotification($gameId, $teamId, 'GameFinished');
+	message.addData("_totalKm_", $tot_dist.getScore());
+  message.addData("_finalDestination_", final_destination);
+  insert(message);
+end
